@@ -1,7 +1,7 @@
 ﻿using BPFC_System;
 using System;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public class AdminInitializer : IDisposable
     {

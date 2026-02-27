@@ -12,7 +12,7 @@ using OfficeOpenXml;
 using System.Drawing;
 
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public partial class frmReport : DevExpress.XtraEditors.XtraForm
     {
@@ -33,7 +33,7 @@ namespace BFPC_System
         public frmReport()
         {
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
             dbManager = new DatabaseManager(connectionString);
             dbContext = new BpfcDbContext(connectionString);
             dgvReport.ReadOnly = true;
@@ -320,7 +320,7 @@ namespace BFPC_System
             };
 
             DateTime selectedDate = dtpReportDate.Value;
-            string defaultFileName = $"Daily-Report-BPFC Compliance Checklist {selectedDate.ToString("dd-MM-yyyy")}.xlsx";
+            string defaultFileName = $"APH Digital Auto Reporting – BPFC & Heating Machine Temperature Compliance {selectedDate.ToString("yyyyMMdd")}.xlsx";
             saveFileDialog.FileName = defaultFileName;
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -361,7 +361,6 @@ namespace BFPC_System
                     }
 
                     excelExporter.SaveWorkbookWithUniqueName(filePath);
-                    MessageBox.Show(this, "Dữ liệu đã được xuất thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 dgvReport.DataSource = originalDataSource;
@@ -1034,10 +1033,15 @@ namespace BFPC_System
             // Tạo DataTable mới cho xưởng đã chọn
             DataTable plantDataTable = new DataTable();
             plantDataTable.Columns.Add("LineID", typeof(int));
+            plantDataTable.Columns.Add("LineNumber", typeof(int));
             plantDataTable.Columns.Add("LineName", typeof(object));
+            plantDataTable.Columns.Add("FirstLetter", typeof(char));
             plantDataTable.Columns.Add("Model", typeof(object));
             plantDataTable.Columns.Add("ArticleName", typeof(object));
             plantDataTable.Columns.Add("PartName", typeof(object));
+            plantDataTable.Columns.Add("StandardTemp_Heat", typeof(object));
+            plantDataTable.Columns.Add("ActualTemp_Heat", typeof(object));
+            plantDataTable.Columns.Add("ResultTemp_Heat", typeof(object));
             plantDataTable.Columns.Add("StandardTemp_1", typeof(object));
             plantDataTable.Columns.Add("ActualTemp_1", typeof(object));
             plantDataTable.Columns.Add("ResultTemp_1", typeof(object));
@@ -1047,6 +1051,9 @@ namespace BFPC_System
             plantDataTable.Columns.Add("StandardTemp_3", typeof(object));
             plantDataTable.Columns.Add("ActualTemp_3", typeof(object));
             plantDataTable.Columns.Add("ResultTemp_3", typeof(object));
+            plantDataTable.Columns.Add("StandardTime_Heat", typeof(object));
+            plantDataTable.Columns.Add("ActualTime_Heat", typeof(object));
+            plantDataTable.Columns.Add("ResultTime_Heat", typeof(object));
             plantDataTable.Columns.Add("StandardTime_1", typeof(object));
             plantDataTable.Columns.Add("ActualTime_1", typeof(object));
             plantDataTable.Columns.Add("ResultTime_1", typeof(object));
@@ -1082,6 +1089,9 @@ namespace BFPC_System
                 row["PartName"] = item.PartName;
 
                 // Temp columns
+                SetColumnValue(row, "StandardTemp_Heat", item.StandardTemp_Heat);
+                SetColumnValue(row, "ActualTemp_Heat", item.ActualTemp_Heat);
+                SetColumnValue(row, "ResultTemp_Heat", item.ResultTemp_Heat);
                 SetColumnValue(row, "StandardTemp_1", item.StandardTemp_1);
                 SetColumnValue(row, "ActualTemp_1", item.ActualTemp_1);
                 SetColumnValue(row, "ResultTemp_1", item.ResultTemp_1);
@@ -1093,6 +1103,9 @@ namespace BFPC_System
                 SetColumnValue(row, "ResultTemp_3", item.ResultTemp_3);
 
                 // Time columns
+                SetColumnValue(row, "StandardTime_Heat", item.StandardTime_Heat);
+                SetColumnValue(row, "ActualTime_Heat", item.ActualTime_Heat);
+                SetColumnValue(row, "ResultTime_Heat", item.ResultTime_Heat);
                 SetColumnValue(row, "StandardTime_1", item.StandardTime_1);
                 SetColumnValue(row, "ActualTime_1", item.ActualTime_1);
                 SetColumnValue(row, "ResultTime_1", item.ResultTime_1);
@@ -1137,12 +1150,22 @@ namespace BFPC_System
             dgvReport.Columns["ArticleName"].HeaderText = "Article";
             dgvReport.Columns["PartName"].HeaderText = "Component";
 
+            dgvReport.Columns["StandardTime_Heat"].HeaderText = "Time\nStandard Heat";
+            dgvReport.Columns["ActualTime_Heat"].HeaderText = "Time\nAcutal Heating";
+            dgvReport.Columns["ResultTime_Heat"].HeaderText = "Time\nResult Heating";
+
+            dgvReport.Columns["StandardTemp_Heat"].HeaderText = "Temperature\nStandard Heating";
+            dgvReport.Columns["ActualTemp_Heat"].HeaderText = "Temperature\nAcutal Heating";
+            dgvReport.Columns["ResultTemp_Heat"].HeaderText = "Temperature\nResult Heating";
+
             dgvReport.Columns["StandardTime_1"].HeaderText = "Time\nStandard 1";
             dgvReport.Columns["ActualTime_1"].HeaderText = "Time\nAcutal 1";
             dgvReport.Columns["ResultTime_1"].HeaderText = "Time\nResult 1";
+
             dgvReport.Columns["StandardTemp_1"].HeaderText = "Temperature\nStandard 1";
             dgvReport.Columns["ActualTemp_1"].HeaderText = "Temperature\nAcutal 1";
             dgvReport.Columns["ResultTemp_1"].HeaderText = "Temperature\nResult 1";
+
             dgvReport.Columns["StandardChemical_1"].HeaderText = "Chemical\nStandard 1";
             dgvReport.Columns["ActualChemical_1"].HeaderText = "Chemical\nAcutal 1";
             dgvReport.Columns["ResultChemical_1"].HeaderText = "Chemical\nResult 1";
@@ -1170,44 +1193,65 @@ namespace BFPC_System
 
         private void SetColumnOrder(DataTable dataTable)
         {
-            // Sắp xếp lại thứ tự của các cột theo yêu cầu của bạn
-            SetColumnOrdinal(dataTable, "LineID", 31);
+            // Đưa LineName, Model,... lên đầu
             SetColumnOrdinal(dataTable, "LineName", 0);
             SetColumnOrdinal(dataTable, "Model", 1);
             SetColumnOrdinal(dataTable, "ArticleName", 2);
             SetColumnOrdinal(dataTable, "PartName", 3);
 
-            SetColumnOrdinal(dataTable, "StandardTime_1", 4);
-            SetColumnOrdinal(dataTable, "ActualTime_1", 5);
-            SetColumnOrdinal(dataTable, "ResultTime_1", 6);
-            SetColumnOrdinal(dataTable, "StandardTemp_1", 7);
-            SetColumnOrdinal(dataTable, "ActualTemp_1", 8);
-            SetColumnOrdinal(dataTable, "ResultTemp_1", 9);
-            SetColumnOrdinal(dataTable, "StandardChemical_1", 10);
-            SetColumnOrdinal(dataTable, "ActualChemical_1", 11);
-            SetColumnOrdinal(dataTable, "ResultChemical_1", 12);
+            // Nhóm Heat Time và Temp
+            SetColumnOrdinal(dataTable, "StandardTime_Heat", 4);
+            SetColumnOrdinal(dataTable, "ActualTime_Heat", 5);
+            SetColumnOrdinal(dataTable, "ResultTime_Heat", 6);
+            SetColumnOrdinal(dataTable, "StandardTemp_Heat", 7);
+            SetColumnOrdinal(dataTable, "ActualTemp_Heat", 8);
+            SetColumnOrdinal(dataTable, "ResultTemp_Heat", 9);
 
-            SetColumnOrdinal(dataTable, "StandardTime_2", 13);
-            SetColumnOrdinal(dataTable, "ActualTime_2", 14);
-            SetColumnOrdinal(dataTable, "ResultTime_2", 15);
-            SetColumnOrdinal(dataTable, "StandardTemp_2", 16);
-            SetColumnOrdinal(dataTable, "ActualTemp_2", 17);
-            SetColumnOrdinal(dataTable, "ResultTemp_2", 18);
-            SetColumnOrdinal(dataTable, "StandardChemical_2", 19);
-            SetColumnOrdinal(dataTable, "ActualChemical_2", 20);
-            SetColumnOrdinal(dataTable, "ResultChemical_2", 21);
+            // Nhóm số 1: Time_1 và Temp_1
+            SetColumnOrdinal(dataTable, "StandardTime_1", 10);
+            SetColumnOrdinal(dataTable, "ActualTime_1", 11);
+            SetColumnOrdinal(dataTable, "ResultTime_1", 12);
+            SetColumnOrdinal(dataTable, "StandardTemp_1", 13);
+            SetColumnOrdinal(dataTable, "ActualTemp_1", 14);
+            SetColumnOrdinal(dataTable, "ResultTemp_1", 15);
 
-            SetColumnOrdinal(dataTable, "StandardTime_3", 22);
-            SetColumnOrdinal(dataTable, "ActualTime_3", 23);
-            SetColumnOrdinal(dataTable, "ResultTime_3", 24);
-            SetColumnOrdinal(dataTable, "StandardTemp_3", 25);
-            SetColumnOrdinal(dataTable, "ActualTemp_3", 26);
-            SetColumnOrdinal(dataTable, "ResultTemp_3", 27);
-            SetColumnOrdinal(dataTable, "StandardChemical_3", 28);
-            SetColumnOrdinal(dataTable, "ActualChemical_3", 29);
-            SetColumnOrdinal(dataTable, "ResultChemical_3", 30);
+            // Nhóm số 1: Chemical_1
+            SetColumnOrdinal(dataTable, "StandardChemical_1", 16);
+            SetColumnOrdinal(dataTable, "ActualChemical_1", 17);
+            SetColumnOrdinal(dataTable, "ResultChemical_1", 18);
+
+            // Nhóm số 2: Time_2 và Temp_2
+            SetColumnOrdinal(dataTable, "StandardTime_2", 19);
+            SetColumnOrdinal(dataTable, "ActualTime_2", 20);
+            SetColumnOrdinal(dataTable, "ResultTime_2", 21);
+            SetColumnOrdinal(dataTable, "StandardTemp_2", 22);
+            SetColumnOrdinal(dataTable, "ActualTemp_2", 23);
+            SetColumnOrdinal(dataTable, "ResultTemp_2", 24);
+
+            // Nhóm số 2: Chemical_2
+            SetColumnOrdinal(dataTable, "StandardChemical_2", 25);
+            SetColumnOrdinal(dataTable, "ActualChemical_2", 26);
+            SetColumnOrdinal(dataTable, "ResultChemical_2", 27);
+
+            // Nhóm số 3: Time_3 và Temp_3
+            SetColumnOrdinal(dataTable, "StandardTime_3", 28);
+            SetColumnOrdinal(dataTable, "ActualTime_3", 29);
+            SetColumnOrdinal(dataTable, "ResultTime_3", 30);
+            SetColumnOrdinal(dataTable, "StandardTemp_3", 31);
+            SetColumnOrdinal(dataTable, "ActualTemp_3", 32);
+            SetColumnOrdinal(dataTable, "ResultTemp_3", 33);
+
+            // Nhóm số 3: Chemical_3
+            SetColumnOrdinal(dataTable, "StandardChemical_3", 34);
+            SetColumnOrdinal(dataTable, "ActualChemical_3", 35);
+            SetColumnOrdinal(dataTable, "ResultChemical_3", 36);
+
+            // Cuối cùng nếu có LineID, cho vào cuối cùng (hoặc theo ý bạn)
+            if (dataTable.Columns.Contains("LineID"))
+            {
+                SetColumnOrdinal(dataTable, "LineID", 37);
+            }
         }
-
         private void SetColumnOrdinal(DataTable dataTable, string columnName, int newOrdinal)
         {
             DataColumn column = dataTable.Columns[columnName];
@@ -1230,41 +1274,60 @@ namespace BFPC_System
             SetColumnDisplayIndex(dataGridView, "ArticleName", 2);
             SetColumnDisplayIndex(dataGridView, "PartName", 3);
 
-            SetColumnDisplayIndex(dataGridView, "StandardTemp_1", 4);
-            SetColumnDisplayIndex(dataGridView, "ActualTemp_1", 5);
-            SetColumnDisplayIndex(dataGridView, "ResultTemp_1", 6);
+            // Nhóm Temp_Heat
+            SetColumnDisplayIndex(dataGridView, "StandardTemp_Heat", 4);
+            SetColumnDisplayIndex(dataGridView, "ActualTemp_Heat", 5);
+            SetColumnDisplayIndex(dataGridView, "ResultTemp_Heat", 6);
 
-            SetColumnDisplayIndex(dataGridView, "StandardTime_1", 7);
-            SetColumnDisplayIndex(dataGridView, "ActualTime_1", 8);
-            SetColumnDisplayIndex(dataGridView, "ResultTime_1", 9);
+            // Nhóm Time_Heat
+            SetColumnDisplayIndex(dataGridView, "StandardTime_Heat", 7);
+            SetColumnDisplayIndex(dataGridView, "ActualTime_Heat", 8);
+            SetColumnDisplayIndex(dataGridView, "ResultTime_Heat", 9);
 
-            SetColumnDisplayIndex(dataGridView, "StandardChemical_1", 10);
-            SetColumnDisplayIndex(dataGridView, "ActualChemical_1", 11);
-            SetColumnDisplayIndex(dataGridView, "ResultChemical_1", 12);
+            // Nhóm Temp_1
+            SetColumnDisplayIndex(dataGridView, "StandardTemp_1", 10);
+            SetColumnDisplayIndex(dataGridView, "ActualTemp_1", 11);
+            SetColumnDisplayIndex(dataGridView, "ResultTemp_1", 12);
 
-            SetColumnDisplayIndex(dataGridView, "StandardTemp_2", 13);
-            SetColumnDisplayIndex(dataGridView, "ActualTemp_2", 14);
-            SetColumnDisplayIndex(dataGridView, "ResultTemp_2", 15);
+            // Nhóm Time_1
+            SetColumnDisplayIndex(dataGridView, "StandardTime_1", 13);
+            SetColumnDisplayIndex(dataGridView, "ActualTime_1", 14);
+            SetColumnDisplayIndex(dataGridView, "ResultTime_1", 15);
 
-            SetColumnDisplayIndex(dataGridView, "StandardTime_2", 16);
-            SetColumnDisplayIndex(dataGridView, "ActualTime_2", 17);
-            SetColumnDisplayIndex(dataGridView, "ResultTime_2", 18);
+            // Nhóm Chemical_1
+            SetColumnDisplayIndex(dataGridView, "StandardChemical_1", 16);
+            SetColumnDisplayIndex(dataGridView, "ActualChemical_1", 17);
+            SetColumnDisplayIndex(dataGridView, "ResultChemical_1", 18);
 
-            SetColumnDisplayIndex(dataGridView, "StandardChemical_2", 19);
-            SetColumnDisplayIndex(dataGridView, "ActualChemical_2", 20);
-            SetColumnDisplayIndex(dataGridView, "ResultChemical_2", 21);
+            // Nhóm Temp_2
+            SetColumnDisplayIndex(dataGridView, "StandardTemp_2", 19);
+            SetColumnDisplayIndex(dataGridView, "ActualTemp_2", 20);
+            SetColumnDisplayIndex(dataGridView, "ResultTemp_2", 21);
 
-            SetColumnDisplayIndex(dataGridView, "StandardTemp_3", 22);
-            SetColumnDisplayIndex(dataGridView, "ActualTemp_3", 23);
-            SetColumnDisplayIndex(dataGridView, "ResultTemp_3", 24);
+            // Nhóm Time_2
+            SetColumnDisplayIndex(dataGridView, "StandardTime_2", 22);
+            SetColumnDisplayIndex(dataGridView, "ActualTime_2", 23);
+            SetColumnDisplayIndex(dataGridView, "ResultTime_2", 24);
 
-            SetColumnDisplayIndex(dataGridView, "StandardTime_3", 25);
-            SetColumnDisplayIndex(dataGridView, "ActualTime_3", 26);
-            SetColumnDisplayIndex(dataGridView, "ResultTime_3", 27);
+            // Nhóm Chemical_2
+            SetColumnDisplayIndex(dataGridView, "StandardChemical_2", 25);
+            SetColumnDisplayIndex(dataGridView, "ActualChemical_2", 26);
+            SetColumnDisplayIndex(dataGridView, "ResultChemical_2", 27);
 
-            SetColumnDisplayIndex(dataGridView, "StandardChemical_3", 28);
-            SetColumnDisplayIndex(dataGridView, "ActualChemical_3", 29);
-            SetColumnDisplayIndex(dataGridView, "ResultChemical_3", 30);
+            // Nhóm Temp_3
+            SetColumnDisplayIndex(dataGridView, "StandardTemp_3", 28);
+            SetColumnDisplayIndex(dataGridView, "ActualTemp_3", 29);
+            SetColumnDisplayIndex(dataGridView, "ResultTemp_3", 30);
+
+            // Nhóm Time_3
+            SetColumnDisplayIndex(dataGridView, "StandardTime_3", 31);
+            SetColumnDisplayIndex(dataGridView, "ActualTime_3", 32);
+            SetColumnDisplayIndex(dataGridView, "ResultTime_3", 33);
+
+            // Nhóm Chemical_3
+            SetColumnDisplayIndex(dataGridView, "StandardChemical_3", 34);
+            SetColumnDisplayIndex(dataGridView, "ActualChemical_3", 35);
+            SetColumnDisplayIndex(dataGridView, "ResultChemical_3", 36);
         }
 
         private void SetColumnDisplayIndex(DataGridView dataGridView, string columnName, int newDisplayIndex)

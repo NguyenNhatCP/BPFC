@@ -1,14 +1,13 @@
-﻿using DevExpress.XtraEditors;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
 using System.Drawing;
-using BFPC_System;
-using System.Threading.Tasks;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using DevExpress.XtraEditors;
 
 namespace BPFC_System
 {
@@ -20,7 +19,7 @@ namespace BPFC_System
         {
             InitializeComponent(); 
 
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
             DoubleBuffered = true;
             EnableDoubleBufferingForControls(this);
             DisplayArticleNames();
@@ -656,7 +655,9 @@ namespace BPFC_System
             public string Model { get; set; }
             public string ArticleName { get; set; }
             public float? Temp1Upper { get; set; }
-            public string Time1Upper { get; set; }
+            public float? TempHeatUpper { get; set; } 
+            public string Time1Upper { get; set; } 
+            public string TimeHeatUpper { get; set; }
             public string Chemical1Upper { get; set; }
             public float? Temp2Upper { get; set; }
             public string Time2Upper { get; set; }

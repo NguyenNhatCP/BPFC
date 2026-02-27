@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     internal class ExcelExporter : IDisposable
     {
@@ -399,11 +399,33 @@ namespace BFPC_System
         private void MergeAndFillHeaders(ExcelWorksheet sheet)
         {
             int startRow = 3;
-            int currentColumn = 5;
+            int currentColumn = 5; // Start from column 5
             string[] headerLabels = { "Thời gian sấy\nHeating Time", "Nhiệt độ\nTemperature", "Hóa chất\nChemical" };
             Color[] headerColors = { Color.LightBlue, Color.LightSkyBlue, Color.LightSeaGreen };
-            int headerIndex = 0;
 
+            // Manually add 2 fixed header groups from column 5 to 10
+            for (int i = 0; i < 2; i++)
+            {
+                int mergeStart = currentColumn;
+                int mergeEnd = currentColumn + 2;
+
+                ExcelRange mergeRange = sheet.Cells[startRow, mergeStart, startRow, mergeEnd];
+                mergeRange.Merge = true;
+                mergeRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                mergeRange.Style.Fill.BackgroundColor.SetColor(headerColors[i]);
+                mergeRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                mergeRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                mergeRange.Style.WrapText = true;
+
+                mergeRange.Value = headerLabels[i];
+                mergeRange.Worksheet.Row(startRow).Height = 40;
+                mergeRange.Style.Font.Size = 13;
+
+                currentColumn += 3;
+            }
+
+            // Now continue from column 11 onward as usual
+            int headerIndex = 0; // Start with "Hóa chất\nChemical"
             while (currentColumn <= sheet.Dimension.End.Column)
             {
                 int mergeCount = Math.Min(sheet.Dimension.End.Column - currentColumn + 1, 3);
@@ -413,13 +435,12 @@ namespace BFPC_System
                 mergeRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 mergeRange.Style.Fill.BackgroundColor.SetColor(headerColors[headerIndex]);
                 mergeRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                mergeRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                mergeRange.Style.WrapText = true;
 
                 mergeRange.Value = headerLabels[headerIndex];
-
                 mergeRange.Worksheet.Row(startRow).Height = 40;
-
                 mergeRange.Style.Font.Size = 13;
-
 
                 currentColumn += mergeCount;
                 headerIndex = (headerIndex + 1) % headerLabels.Length;
@@ -438,11 +459,22 @@ namespace BFPC_System
         private void MergeAndFillMachineNames(ExcelWorksheet sheet)
         {
             int startRow = 2;
-            int currentColumn = 5;
+            int currentColumn = 11;
             string[] machineNames = { "Máy sấy 1\nOven Machine 1", "Máy sấy 2\n Oven Machine 2", "Máy sấy 3\nOven Machine 3" };
 
             Color[] backgroundColors = { Color.Beige, Color.LightGray, Color.LightSteelBlue };
             int colorIndex = 0;
+
+            // Thêm Heating Machine từ cột 5 đến 10
+            ExcelRange heatingRange = sheet.Cells[startRow, 5, startRow, 10];
+            heatingRange.Merge = true;
+            heatingRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            heatingRange.Style.Fill.BackgroundColor.SetColor(Color.LightYellow);
+            heatingRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            heatingRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            heatingRange.Style.Font.Size = 14;
+            heatingRange.Value = "Máy định hình nóng\nHeating Machine";
+            sheet.Row(startRow).Height = 50;
 
             for (int i = 0; i < machineNames.Length; i++)
             {
@@ -450,23 +482,15 @@ namespace BFPC_System
                 ExcelRange mergeRange = sheet.Cells[startRow, currentColumn, startRow, currentColumn + mergeCount - 1];
 
                 mergeRange.Merge = true;
-
                 mergeRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
-
                 mergeRange.Style.Fill.BackgroundColor.SetColor(backgroundColors[colorIndex]);
-
                 mergeRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
+                mergeRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 mergeRange.Style.Font.Size = 14;
-
                 mergeRange.Value = machineNames[i];
-
-                mergeRange.Worksheet.Row(startRow).Height = 50;
-
-                mergeRange.Style.Font.Size = 14;
+                sheet.Row(startRow).Height = 50;
 
                 colorIndex = (colorIndex + 1) % backgroundColors.Length;
-
                 currentColumn += mergeCount;
             }
         }
@@ -533,10 +557,10 @@ namespace BFPC_System
                     sheet.View.FreezePanes(5, 5);
 
 
-                    string[] columnsToCheck = { "H", "Q", "Z" };
+                    string[] columnsToCheck = { "H", "N", "W", "AF" };
                     AddTemperatureToleranceToColumns(sheet, columnsToCheck);
 
-                    string[] columnsToAdd = { "I", "R", "AA" };
+                    string[] columnsToAdd = { "I", "O", "X", "AG" };
                     AddDegreeCelsiusSymbolToColumns(sheet, columnsToAdd);
                 }
             }
@@ -591,8 +615,7 @@ namespace BFPC_System
 
             foreach (string column in columnsToCheck)
             {
-                // Convert column string to column index
-                int columnIndex = column[0] - 'A' + 1;
+                int columnIndex = GetColumnIndexFromColumnName(sheet, column);
 
                 for (int row = startRow; row <= endRow; row++)
                 {
@@ -610,7 +633,6 @@ namespace BFPC_System
             }
         }
 
-
         private void AddTitleToPlantSheet(ExcelWorksheet sheet)
         {
             int startColumn = 1;
@@ -621,7 +643,7 @@ namespace BFPC_System
             ExcelRange titleRange = sheet.Cells[startRow, startColumn, endRow, endColumn];
             titleRange.Merge = true;
             titleRange.Style.WrapText = true;
-            titleRange.Value = "Biểu kiểm tra TUÂN THỦ QUY TRÌNH BPFC - " + sheet.Name + "\nBPFC Compliance Checksheet - " + sheet.Name.Replace("Plant", "Xưởng");
+            titleRange.Value = "Biểu kiểm tra TUÂN THỦ QUY TRÌNH BPFC và máy sấy nóng - " + sheet.Name + "\nBPFC Compliance Checksheet and Heating Machine - " + sheet.Name.Replace("Plant", "Xưởng");
             titleRange.Style.Font.Size = 22;
             titleRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
             titleRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;

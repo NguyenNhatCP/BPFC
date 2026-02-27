@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Configuration;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public partial class frmHome : DevExpress.XtraEditors.XtraForm
     {
@@ -14,7 +14,7 @@ namespace BFPC_System
         public frmHome()
         {
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
         }
 
         private void frmHome_Load(object sender, EventArgs e)

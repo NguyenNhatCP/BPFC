@@ -1,20 +1,22 @@
-﻿using BFPC_System;
-using Microsoft.Office.Interop.Outlook;
-using System;
+﻿using BPFC_System;
+using DevExpress.XtraPrinting.Native;
 using Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Outlook;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table.PivotTable;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
+using System.Runtime.InteropServices;
 using System.Text;
-using Outlook = Microsoft.Office.Interop.Outlook;
+using System.Threading;
+using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
-using DevExpress.XtraPrinting.Native;
-using OfficeOpenXml.Table.PivotTable;
-using System.Collections.Generic;
+using Outlook = Microsoft.Office.Interop.Outlook;
 
 
 
@@ -57,7 +59,7 @@ namespace BPFC_System
         {
             string defaultAttachmentPath = string.Empty;
             string folderPath = @"D:\Report";
-            string searchPattern = "Daily-Report-BPFC Compliance Checklist*";
+            string searchPattern = "APH Digital Auto Reporting – BPFC & Heating Machine Temperature Compliance*";
 
             try
             {
@@ -111,39 +113,106 @@ namespace BPFC_System
 
         private void ComposeEmail(string defaultAttachmentPath)
         {
-            string defaultSubjectDate = GenerateDefaultSubject();
-
-            try
+            Thread t = new Thread(() =>
             {
-                Microsoft.Office.Interop.Outlook.Application outlookApp = new Microsoft.Office.Interop.Outlook.Application();
-                MailItem mailItem = (MailItem)outlookApp.CreateItem(OlItemType.olMailItem);
+                Outlook.Application outlookApp = null;
+                Outlook.MailItem mailItem = null;
+                Excel.Application excelApp = null;
+                Excel.Workbook workbook = null;
 
-                SetMailItemProperties(mailItem, defaultSubjectDate, defaultAttachmentPath);
-                SetMailRecipients(mailItem);
+                try
+                {
+                    // Log 1: Start
+                    //System.Windows.Forms.MessageBox.Show("Starting Email Composition...", "Log");
 
-                Excel.Application excelApp = new Excel.Application();
-                Excel.Workbook workbook = excelApp.Workbooks.Open(defaultAttachmentPath);
-                Excel.Worksheet worksheet = workbook.Sheets["Daily Report"];
-                Excel.Range range = worksheet.UsedRange;
+                    string defaultSubjectDate = GenerateDefaultSubject();
 
-                StringBuilder emailBody = new StringBuilder();
+                    // ===== OUTLOOK =====
+                    outlookApp = new Outlook.Application();
+                    mailItem = (Outlook.MailItem)outlookApp.CreateItem(Outlook.OlItemType.olMailItem);
 
-                string valueInF5 = ScanAndSaveF5Value(range);
-                List<string> failCellValues = GetCellValuesInColumn2ForFailRows(worksheet);
+                    SetMailItemProperties(mailItem, defaultSubjectDate, defaultAttachmentPath);
+                    SetMailRecipients(mailItem);
 
-                string emailText = ComposeEmailText(defaultSubjectDate, valueInF5, failCellValues);
+                    // ===== EXCEL =====
+                    excelApp = new Excel.Application
+                    {
+                        Visible = true, // SET TO TRUE TEMPORARILY: This helps you see if Excel is showing a popup
+                        DisplayAlerts = false
+                    };
 
-                SetEmailBodyAndDisplay(mailItem, range, emailBody, emailText);
+                    // Log 1: Verify Path
+                    string fullPath = System.IO.Path.GetFullPath(defaultAttachmentPath);
+                    //System.Windows.Forms.MessageBox.Show($"Checking file at: {fullPath}", "Check Log 1");
 
-                CloseExcelApplication(workbook, excelApp);
+                    if (!System.IO.File.Exists(fullPath))
+                    {
+                        System.Windows.Forms.MessageBox.Show("ERROR: File does not exist at that path.", "Check Log 2");
+                        return;
+                    }
 
-                mailItem.Display();
-            }
+                    try
+                    {
+                        // Log 2: Attempting Open
+                        //System.Windows.Forms.MessageBox.Show("File exists. Attempting Workbooks.Open...", "Check Log 3");
 
-            catch (System.Exception ex)
-            {
-                HandleError(ex);
-            }
+                        // Use optional parameters to force open without repair/prompts
+                        workbook = excelApp.Workbooks.Open(fullPath, ReadOnly: true);
+
+                        //System.Windows.Forms.MessageBox.Show("SUCCESS: Workbook opened!", "Check Log 4");
+                    }
+                    catch (System.Runtime.InteropServices.COMException comEx)
+                    {
+                        // This will catch specific Excel/Office errors
+                        System.Windows.Forms.MessageBox.Show(
+                            $"EXCEL COM ERROR\n\n" +
+                            $"Message: {comEx.Message}\n" +
+                            $"Error Code: {comEx.ErrorCode}\n" +
+                            $"Is Excel Busy? This happens if you are clicking a cell while code runs.",
+                            "Check Log Failed");
+                    }
+                 
+                    // Log 2: Excel Opened
+                    //System.Windows.Forms.MessageBox.Show("Excel File Opened Successfully.", "Log");
+
+                    Excel.Worksheet worksheet = workbook.Sheets["Daily Report"];
+                    Excel.Range range = worksheet.UsedRange;
+
+                    string valueInF5 = ScanAndSaveF5Value(range);
+                    List<string> failCellValues = GetCellValuesInColumn2ForFailRows(worksheet);
+
+                    string emailText = ComposeEmailText();
+                    SetEmailBodyAndDisplay(mailItem, range, new StringBuilder(), emailText);
+
+                    mailItem.Display();
+
+                    // Log 3: Success
+                    //System.Windows.Forms.MessageBox.Show("Email Created and Displayed.", "Success");
+                }
+                catch (System.Exception ex)
+                {
+                    // Log 4: Error
+                    System.Windows.Forms.MessageBox.Show($"An error occurred:\n{ex.Message}", "Error");
+                    HandleError(ex);
+                }
+                finally
+                {
+                    // ===== CLEANUP =====
+                    if (workbook != null) { workbook.Close(false); Marshal.ReleaseComObject(workbook); }
+                    if (excelApp != null) { excelApp.Quit(); Marshal.ReleaseComObject(excelApp); }
+                    if (mailItem != null) Marshal.ReleaseComObject(mailItem);
+                    if (outlookApp != null) Marshal.ReleaseComObject(outlookApp);
+
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+
+                    // Log 5: Cleanup Finished
+                    //System.Windows.Forms.MessageBox.Show("Resources released and thread closing.", "Log");
+                }
+            });
+
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
         private bool fileErrorHandled = false;
 
@@ -213,54 +282,65 @@ namespace BPFC_System
 
         private void SetMailItemProperties(MailItem mailItem, string defaultSubjectDate, string defaultAttachmentPath)
         {
-            mailItem.Subject = $"BPFC compliance daily report on {defaultSubjectDate}";
+            mailItem.Subject = $"APH Digital Auto Reporting – BPFC & Heating Machine Temperature Compliance";
             mailItem.Attachments.Add(defaultAttachmentPath);
         }
 
-        private string ComposeEmailText(string defaultSubjectDate, string valueInF5, List<string> failCellValues)
+        private string ComposeEmailText()
         {
-            string case1Text = "Dear all,<br>" +
-                $"I would like to send out the BPFC compliance on {defaultSubjectDate} is {valueInF5}.<br>" +
-                "Thank you so much. <br> " +
-                "<br> " +
-                "This email is automatically generated, you do not need to reply. <br>" +
-                "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
+            string case1Text = "This is the APH Digital Auto Reporting System.<br>" +
+                "We would like to provide you with a report on BPFC and Heating Machine compliance.<br>" +
+                "Please see the report details below.<br><br>" +
+                "Please note:<br>" +
+                "This is an automatically generated email. Do not reply to this email address.<br>" +
+                "If you have any questions or concerns, please contact Ms. Lily at email: Lily-Nguyen@vn.apachefootwear.com";
 
-            string case2Text;
-            if (failCellValues.Count == 1)
-            {
-                case2Text = "Dear all,<br>" +
-                    $"I would like to send out the BPFC compliance on {defaultSubjectDate} is {valueInF5}.<br>" +
-                    $"In this report, there is one line that is Fail ({string.Join(", ", failCellValues)}).<br>" +
-                    "Please note!<br>" +
-                    "Thank you so much. <br>" +
-                    "<br> " +
-                    "This email is automatically generated, you do not need to reply. <br>" +
-                    "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
-            }
-            else if (failCellValues.Count > 1)
-            {
-                case2Text = "Dear all,<br>" +
-                    $"I would like to send out the BPFC compliance on {defaultSubjectDate} is {valueInF5}.<br>" +
-                    $"In this report, there are {failCellValues.Count} lines that are Fail ({string.Join(", ", failCellValues)}).<br>" +
-                    "Please note!<br>" +
-                    "Thank you so much. <br>" +
-                    "<br> " +
-                    "This email is automatically generated, you do not need to reply. <br>" +
-                    "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
-            }
-            else
-            {
-                case2Text = "Dear all,<br>" +
-                    $"I would like to send out the BPFC compliance on {defaultSubjectDate} is {valueInF5}.<br>" +
-                    "Thank you so much. <br>" +
-                    "<br> " +
-                    "This email is automatically generated, you do not need to reply. <br>" +
-                    "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
-            }
-
-            return (valueInF5.Equals("100%", StringComparison.OrdinalIgnoreCase) || valueInF5.Equals("100.0%", StringComparison.OrdinalIgnoreCase)) ? case1Text : case2Text;
+            return case1Text;
         }
+        //private string ComposeEmailText(string defaultSubjectDate, string valueInF5, List<string> failCellValues)
+        //{
+        //    string case1Text = "Dear all,<br>" +
+        //        $"I would like to send out the BPFC compliance and Heating Machine on {defaultSubjectDate} is {valueInF5}.<br>" +
+        //        "Thank you so much. <br> " +
+        //        "<br> " +
+        //        "This email is automatically generated, you do not need to reply. <br>" +
+        //        "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
+
+        //    string case2Text;
+        //    if (failCellValues.Count == 1)
+        //    {
+        //        case2Text = "Dear all,<br>" +
+        //            $"I would like to send out the BPFC compliance on {defaultSubjectDate} is {valueInF5}.<br>" +
+        //            $"In this report, there is one line that is Fail ({string.Join(", ", failCellValues)}).<br>" +
+        //            "Please note!<br>" +
+        //            "Thank you so much. <br>" +
+        //            "<br> " +
+        //            "This email is automatically generated, you do not need to reply. <br>" +
+        //            "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
+        //    }
+        //    else if (failCellValues.Count > 1)
+        //    {
+        //        case2Text = "Dear all,<br>" +
+        //            $"I would like to send out the BPFC compliance on {defaultSubjectDate} is {valueInF5}.<br>" +
+        //            $"In this report, there are {failCellValues.Count} lines that are Fail ({string.Join(", ", failCellValues)}).<br>" +
+        //            "Please note!<br>" +
+        //            "Thank you so much. <br>" +
+        //            "<br> " +
+        //            "This email is automatically generated, you do not need to reply. <br>" +
+        //            "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
+        //    }
+        //    else
+        //    {
+        //        case2Text = "Dear all,<br>" +
+        //            $"I would like to send out the BPFC compliance on {defaultSubjectDate} is {valueInF5}.<br>" +
+        //            "Thank you so much. <br>" +
+        //            "<br> " +
+        //            "This email is automatically generated, you do not need to reply. <br>" +
+        //            "If there are any problems, please contact via email Lily-Nguyen@vn.apachefootwear.com ";
+        //    }
+
+        //    return (valueInF5.Equals("100%", StringComparison.OrdinalIgnoreCase) || valueInF5.Equals("100.0%", StringComparison.OrdinalIgnoreCase)) ? case1Text : case2Text;
+        //}
 
         private void SetEmailBodyAndDisplay(MailItem mailItem, Excel.Range range, StringBuilder emailBody, string emailText)
         {

@@ -51,7 +51,7 @@
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2" />
   </startup>
 	<connectionStrings>
-		<add name="strCon" connectionString="Data Source=10.30.0.116;Initial Catalog=BPFC_Database; User Id=sa;Password=12345;" providerName="System.Data.SqlClient" />
+		<add name="strCon" connectionString="Data Source=10.30.0.116;Initial Catalog=BPFC_Database; User Id=sa;Password=Lacty123@;" providerName="System.Data.SqlClient" />
 	</connectionStrings>
 
 	<runtime>

@@ -7,7 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     internal class ExcelExportRandomCheck
     {

@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public partial class frmRandomCheck : DevExpress.XtraEditors.XtraForm
     {
@@ -29,7 +29,7 @@ namespace BFPC_System
             InitializeComponent();
             CreateRandomCheckDataTable();
             CreateInputDataTable();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
             dbManager = new DatabaseManager(connectionString);
             dtpDate.Format = DateTimePickerFormat.Custom;
             dtpDate.CustomFormat = "dd/MM/yyyy";

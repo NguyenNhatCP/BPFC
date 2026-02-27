@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 using static BPFC_System.DatabaseManager;
@@ -17,7 +14,7 @@ namespace BPFC_System
         public CreatePlant()
         {
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            string connectionString = ConfigHelper.GetConnectionString("strCon");
             dbManager = new DatabaseManager(connectionString);
             LoadPlantNames();
             this.DoubleBuffered = true;

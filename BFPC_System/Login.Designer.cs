@@ -146,7 +146,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayoutStore = System.Windows.Forms.ImageLayout.Stretch;
-            this.BackgroundImageStore = global::BFPC_System.Properties.Resources.AuditSystemBg;
+            this.BackgroundImageStore = global::BPFC_System.Properties.Resources.AuditSystemBg;
             this.ClientSize = new System.Drawing.Size(849, 527);
             this.Controls.Add(this.lblShowPassword);
             this.Controls.Add(this.btnExit);
@@ -157,7 +157,7 @@
             this.Controls.Add(this.txtUsername);
             this.FormBorderEffect = DevExpress.XtraEditors.FormBorderEffect.Shadow;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.IconOptions.Image = global::BFPC_System.Properties.Resources.LogoAPH;
+            this.IconOptions.Image = global::BPFC_System.Properties.Resources.LogoAPH;
             this.MaximizeBox = false;
             this.Name = "frmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -1,4 +1,4 @@
-﻿namespace BFPC_System
+﻿namespace BPFC_System
 {
     partial class frmEditUser
     {

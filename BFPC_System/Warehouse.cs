@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Data.SqlClient;
 using static BPFC_System.frmBpfc;
-using BFPC_System;
+using BPFC_System;
 using static BpfcDbContext;
 using System.Diagnostics;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace BPFC_System
             dtpDate.MaxDate = DateTime.Now;
             dtpDate.Value = DateTime.Now;
 
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
             dbManager = new DatabaseManager(connectionString);
             EnableDoubleBufferingForControls(this);
 

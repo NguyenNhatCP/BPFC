@@ -10,11 +10,14 @@ using static BPFC_System.frmBpfc;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Linq;
-using BFPC_System;
+using BPFC_System;
 using static BpfcDbContext;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using DevExpress.XtraCharts.Design;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace BPFC_System
 {
@@ -29,7 +32,9 @@ namespace BPFC_System
         public frmPlant()
         {
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
+            DatabaseManager dbManager = new DatabaseManager(connectionString);
+
             DoubleBuffered = true;
             dtpDate.MaxDate = DateTime.Now;
             dtpDate.Value = DateTime.Now;
@@ -197,6 +202,7 @@ namespace BPFC_System
             }
             ClearTextBoxes();
             LoadDataFromDatabase(lineName, selectedDate);
+            txtArticle.Focus();
         }
 
         private void ColorizeTextBoxes()
@@ -375,7 +381,7 @@ namespace BPFC_System
 
         private void btnCheckArticle_Click(object sender, EventArgs e)
         {
-            string article = txtArticle.Text.Trim();  // Tránh trường hợp article chỉ chứa khoảng trắng
+            string article = txtArticle.Text.Trim();
 
             if (!string.IsNullOrEmpty(article))
             {
@@ -465,27 +471,44 @@ namespace BPFC_System
 
         private void DisplayArticleData(ArticleData articleData)
         {
-            lblCreatedAt.Text = $"Thời gian tạo: {articleData.CreatedAt.ToString()}"; 
+            lblCreatedAt.Text = $"Thời gian tạo: {articleData.CreatedAt}";
             lblCreatedBy.Text = $"BPFC được nhập bởi: {articleData.CreatedBy}";
 
             txtModel.Text = articleData.Model;
 
             txtStdTime1Upper.Text = articleData.Time1Upper;
+            txtStdTimeHeat_Upper.Text = articleData.TimeHeatUpper;
             txtStdTime1Outsole.Text = articleData.Time1Outsole;
 
-            txtStdTemp1Upper.Text = articleData.Temp1Upper.HasValue ? articleData.Temp1Upper.Value.ToString() + " ±5" : "";
-            txtStdTemp2Upper.Text = articleData.Temp2Upper.HasValue ? articleData.Temp2Upper.Value.ToString() + " ±5" : "";
+            txtStdTemp1Upper.Text = (articleData.Temp1Upper.HasValue && articleData.Temp1Upper.Value != 0)
+                ? $"{articleData.Temp1Upper.Value} ±5" : "";
+
+            txtStdTempHeat_Upper.Text = (articleData.TempHeatUpper.HasValue && articleData.TempHeatUpper.Value != 0)
+                ? $"{articleData.TempHeatUpper.Value} ±5" : "";
+
+            txtStdTemp2Upper.Text = (articleData.Temp2Upper.HasValue && articleData.Temp2Upper.Value != 0)
+                ? $"{articleData.Temp2Upper.Value} ±5" : "";
+
             txtStdTime2Upper.Text = articleData.Time2Upper;
-            txtStdTemp3Upper.Text = articleData.Temp3Upper.HasValue ? articleData.Temp3Upper.Value.ToString() + " ±5" : "";
+
+            txtStdTemp3Outsole.Text = (articleData.Temp3Outsole.HasValue && articleData.Temp3Outsole.Value != 0)
+                ? $"{articleData.Temp3Outsole.Value} ±5" : "";
+
             txtStdTime3Upper.Text = articleData.Time3Upper;
 
-            txtStdTemp1Outsole.Text = articleData.Temp1Outsole.HasValue ? articleData.Temp1Outsole.Value.ToString() + " ±5" : "";
-            txtStdTemp2Outsole.Text = articleData.Temp2Outsole.HasValue ? articleData.Temp2Outsole.Value.ToString() + " ±5" : "";
+            txtStdTemp1Outsole.Text = (articleData.Temp1Outsole.HasValue && articleData.Temp1Outsole.Value != 0)
+                ? $"{articleData.Temp1Outsole.Value} ±5" : "";
+
+            txtStdTemp2Outsole.Text = (articleData.Temp2Outsole.HasValue && articleData.Temp2Outsole.Value != 0)
+                ? $"{articleData.Temp2Outsole.Value} ±5" : "";
+
             txtStdTime2Outsole.Text = articleData.Time2Outsole;
-            txtStdTemp3Outsole.Text = articleData.Temp3Outsole.HasValue ? articleData.Temp3Outsole.Value.ToString() + " ±5" : "";
+
+            txtStdTemp3Upper.Text = (articleData.Temp3Upper.HasValue && articleData.Temp3Upper.Value != 0)
+                ? $"{articleData.Temp3Upper.Value} ±5" : "";
+
             txtStdTime3Outsole.Text = articleData.Time3Outsole;
         }
-
         private bool IsAnyResultTextBoxNull()
         {
             if (string.IsNullOrEmpty(txtResultTemp1Upper.Text) ||
@@ -507,15 +530,43 @@ namespace BPFC_System
             return false;
         }
 
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             btnSave.Focus();
 
             string articleName = txtArticle.Text.Trim();
             DatabaseManager dbManager = new DatabaseManager(connectionString);
-
             bool articleExists = dbManager.ArticleExists(articleName);
 
+            string stdTime_Heat = txtStdTimeHeat_Upper.Text?.Trim() ?? string.Empty;
+            string tempTextRaw = txtStdTempHeat_Upper.Text;
+
+            float? stdTemp_Heat = null;
+
+            // Nếu có nhập nhiệt độ thì xử lý
+            if (!string.IsNullOrWhiteSpace(tempTextRaw))
+            {
+                // Lọc ký tự, chỉ giữ số, dấu chấm, dấu âm
+                string tempText = Regex.Match(tempTextRaw, @"-?\d+(\.\d+)?").Value;
+
+                if (string.IsNullOrWhiteSpace(tempText))
+                {
+                    MessageBox.Show("Không tìm thấy giá trị nhiệt độ hợp lệ. Vui lòng nhập số hoặc để trống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!float.TryParse(tempText, out float parsedTemp))
+                {
+                    MessageBox.Show("Giá trị nhiệt độ không hợp lệ. Vui lòng nhập số hoặc để trống.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                stdTemp_Heat = parsedTemp;
+            }
+
+            // Truyền giá trị float? vào phương thức xử lý (cho phép null)
+            dbManager.UpdateArticlePart_Heat(articleName, stdTemp_Heat, stdTime_Heat);
             if (IsAnyResultTextBoxNull())
             {
                 if (articleExists)
@@ -611,21 +662,21 @@ namespace BPFC_System
 
                     Dictionary<string, string[]> timeResults = new Dictionary<string, string[]>
             {
-                { "Outsole", new string[] { GetNonEmptyText(txtActualTime1Outsole), GetNonEmptyText(txtStdTime1Outsole), GetNonEmptyText(txtResultTime1Outsole), GetNonEmptyText(txtActualTime2Outsole), GetNonEmptyText(txtStdTime2Outsole), GetNonEmptyText(txtResultTime2Outsole), GetNonEmptyText(txtActualTime3Outsole), GetNonEmptyText(txtStdTime3Outsole), GetNonEmptyText(txtResultTime3Outsole) } },
-                { "Upper", new string[] { GetNonEmptyText(txtActualTime1Upper), GetNonEmptyText(txtStdTime1Upper), GetNonEmptyText(txtResultTime1Upper), GetNonEmptyText(txtActualTime2Upper), GetNonEmptyText(txtStdTime2Upper), GetNonEmptyText(txtResultTime2Upper), GetNonEmptyText(txtActualTime3Upper), GetNonEmptyText(txtStdTime3Upper), GetNonEmptyText(txtResultTime3Upper) } }
+                { "Outsole", new string[] { GetNonEmptyText(txtActualTime1Outsole), GetNonEmptyText(txtStdTime1Outsole), GetNonEmptyText(txtResultTime1Outsole), GetNonEmptyText(txtActualTime2Outsole), GetNonEmptyText(txtStdTime2Outsole), GetNonEmptyText(txtResultTime2Outsole), GetNonEmptyText(txtActualTime3Outsole), GetNonEmptyText(txtStdTime3Outsole), GetNonEmptyText(txtResultTime3Outsole), null, null, null } },
+                { "Upper", new string[] { GetNonEmptyText(txtActualTime1Upper), GetNonEmptyText(txtStdTime1Upper), GetNonEmptyText(txtResultTime1Upper), GetNonEmptyText(txtActualTime2Upper), GetNonEmptyText(txtStdTime2Upper), GetNonEmptyText(txtResultTime2Upper), GetNonEmptyText(txtActualTime3Upper), GetNonEmptyText(txtStdTime3Upper), GetNonEmptyText(txtResultTime3Upper), GetNonEmptyText(txtActualTimeHeat_Upper), GetNonEmptyText(txtStdTimeHeat_Upper), GetNonEmptyText(txtResultTimeHeat_Upper) } }
             };
                     Dictionary<string, string[]> tempResults = new Dictionary<string, string[]>
             {
-                { "Outsole", new string[] { GetNonEmptyText(txtActualTemp1Outsole), GetNonEmptyText(txtStdTemp1Outsole), GetNonEmptyText(txtResultTemp1Outsole), GetNonEmptyText(txtActualTemp2Outsole), GetNonEmptyText(txtStdTemp2Outsole), GetNonEmptyText(txtResultTemp2Outsole), GetNonEmptyText(txtActualTemp3Outsole), GetNonEmptyText(txtStdTemp3Outsole), GetNonEmptyText(txtResultTemp3Outsole) } },
-                { "Upper", new string[] { GetNonEmptyText(txtActualTemp1Upper), GetNonEmptyText(txtStdTemp1Upper), GetNonEmptyText(txtResultTemp1Upper), GetNonEmptyText(txtActualTemp2Upper), GetNonEmptyText(txtStdTemp2Upper), GetNonEmptyText(txtResultTemp2Upper), GetNonEmptyText(txtActualTemp3Upper), GetNonEmptyText(txtStdTemp3Upper), GetNonEmptyText(txtResultTemp3Upper) } }
-            }; 
-                    
+                { "Outsole", new string[] { GetNonEmptyText(txtActualTemp1Outsole), GetNonEmptyText(txtStdTemp1Outsole), GetNonEmptyText(txtResultTemp1Outsole), GetNonEmptyText(txtActualTemp2Outsole), GetNonEmptyText(txtStdTemp2Outsole), GetNonEmptyText(txtResultTemp2Outsole), GetNonEmptyText(txtActualTemp3Outsole), GetNonEmptyText(txtStdTemp3Outsole), GetNonEmptyText(txtResultTemp3Outsole), null, null, null } },
+                { "Upper", new string[] { GetNonEmptyText(txtActualTemp1Upper), GetNonEmptyText(txtStdTemp1Upper), GetNonEmptyText(txtResultTemp1Upper), GetNonEmptyText(txtActualTemp2Upper), GetNonEmptyText(txtStdTemp2Upper), GetNonEmptyText(txtResultTemp2Upper), GetNonEmptyText(txtActualTemp3Upper), GetNonEmptyText(txtStdTemp3Upper), GetNonEmptyText(txtResultTemp3Upper), GetNonEmptyText(txtActualTempHeat_Upper), GetNonEmptyText(txtStdTempHeat_Upper), GetNonEmptyText(txtResultTempHeat_Upper) } }
+            };
+
                     if (timeDataExists)
                     {
                         dbManager.UpdateTimeResults(lineId, partIds, timeResults, selectedDate);
                     }
 
-                    if (tempDataExists) 
+                    if (tempDataExists)
                     {
                         dbManager.UpdateTemperatureResults(lineId, partIds, tempResults, selectedDate);
                     }
@@ -635,7 +686,8 @@ namespace BPFC_System
                         txtResultTime1Outsole, txtResultTime2Outsole, txtResultTime3Outsole,
                         txtResultTime1Upper, txtResultTime2Upper, txtResultTime3Upper,
                         txtResultTemp1Outsole, txtResultTemp2Outsole, txtResultTemp3Outsole,
-                        txtResultTemp1Upper, txtResultTemp2Upper, txtResultTemp3Upper
+                        txtResultTemp1Upper, txtResultTemp2Upper, txtResultTemp3Upper,
+                        txtResultTempHeat_Upper, txtResultTimeHeat_Upper
                     );
 
                     dbManager.LogArticleActivity(username, reportDate, lineName, articleName, result, "Insert", department, selectedDate);
@@ -668,17 +720,17 @@ namespace BPFC_System
                     return;
                 }
 
-                
+
                 Dictionary<string, string[]> timeValues = new Dictionary<string, string[]>
             {
-                { "Outsole", new string[] { GetNonEmptyText(txtActualTime1Outsole), GetNonEmptyText(txtStdTime1Outsole), GetNonEmptyText(txtResultTime1Outsole), GetNonEmptyText(txtActualTime2Outsole), GetNonEmptyText(txtStdTime2Outsole), GetNonEmptyText(txtResultTime2Outsole), GetNonEmptyText(txtActualTime3Outsole), GetNonEmptyText(txtStdTime3Outsole), GetNonEmptyText(txtResultTime3Outsole) } },
-                { "Upper", new string[] { GetNonEmptyText(txtActualTime1Upper), GetNonEmptyText(txtStdTime1Upper), GetNonEmptyText(txtResultTime1Upper), GetNonEmptyText(txtActualTime2Upper), GetNonEmptyText(txtStdTime2Upper), GetNonEmptyText(txtResultTime2Upper), GetNonEmptyText(txtActualTime3Upper), GetNonEmptyText(txtStdTime3Upper), GetNonEmptyText(txtResultTime3Upper) } }
+                { "Outsole", new string[] { GetNonEmptyText(txtActualTime1Outsole), GetNonEmptyText(txtStdTime1Outsole), GetNonEmptyText(txtResultTime1Outsole), GetNonEmptyText(txtActualTime2Outsole), GetNonEmptyText(txtStdTime2Outsole), GetNonEmptyText(txtResultTime2Outsole), GetNonEmptyText(txtActualTime3Outsole), GetNonEmptyText(txtStdTime3Outsole), GetNonEmptyText(txtResultTime3Outsole), null, null, null } },
+                { "Upper", new string[] { GetNonEmptyText(txtActualTime1Upper), GetNonEmptyText(txtStdTime1Upper), GetNonEmptyText(txtResultTime1Upper), GetNonEmptyText(txtActualTime2Upper), GetNonEmptyText(txtStdTime2Upper), GetNonEmptyText(txtResultTime2Upper), GetNonEmptyText(txtActualTime3Upper), GetNonEmptyText(txtStdTime3Upper), GetNonEmptyText(txtResultTime3Upper) , GetNonEmptyText(txtActualTimeHeat_Upper), GetNonEmptyText(txtStdTimeHeat_Upper), GetNonEmptyText(txtResultTimeHeat_Upper) } }
             };
 
                 Dictionary<string, string[]> tempValues = new Dictionary<string, string[]>
             {
-                { "Outsole", new string[] { GetNonEmptyText(txtActualTemp1Outsole), GetNonEmptyText(txtStdTemp1Outsole), GetNonEmptyText(txtResultTemp1Outsole), GetNonEmptyText(txtActualTemp2Outsole), GetNonEmptyText(txtStdTemp2Outsole), GetNonEmptyText(txtResultTemp2Outsole), GetNonEmptyText(txtActualTemp3Outsole), GetNonEmptyText(txtStdTemp3Outsole), GetNonEmptyText(txtResultTemp3Outsole) } },
-                { "Upper", new string[] { GetNonEmptyText(txtActualTemp1Upper), GetNonEmptyText(txtStdTemp1Upper), GetNonEmptyText(txtResultTemp1Upper), GetNonEmptyText(txtActualTemp2Upper), GetNonEmptyText(txtStdTemp2Upper), GetNonEmptyText(txtResultTemp2Upper), GetNonEmptyText(txtActualTemp3Upper), GetNonEmptyText(txtStdTemp3Upper), GetNonEmptyText(txtResultTemp3Upper) } }
+                { "Outsole", new string[] { GetNonEmptyText(txtActualTemp1Outsole), GetNonEmptyText(txtStdTemp1Outsole), GetNonEmptyText(txtResultTemp1Outsole), GetNonEmptyText(txtActualTemp2Outsole), GetNonEmptyText(txtStdTemp2Outsole), GetNonEmptyText(txtResultTemp2Outsole), GetNonEmptyText(txtActualTemp3Outsole), GetNonEmptyText(txtStdTemp3Outsole), GetNonEmptyText(txtResultTemp3Outsole), null, null, null } },
+                { "Upper", new string[] { GetNonEmptyText(txtActualTemp1Upper), GetNonEmptyText(txtStdTemp1Upper), GetNonEmptyText(txtResultTemp1Upper), GetNonEmptyText(txtActualTemp2Upper), GetNonEmptyText(txtStdTemp2Upper), GetNonEmptyText(txtResultTemp2Upper), GetNonEmptyText(txtActualTemp3Upper), GetNonEmptyText(txtStdTemp3Upper), GetNonEmptyText(txtResultTemp3Upper), GetNonEmptyText(txtActualTempHeat_Upper), GetNonEmptyText(txtStdTempHeat_Upper), GetNonEmptyText(txtResultTempHeat_Upper) } }
             };
 
                 if (timeValues.Any(v => v.Value.Any(value => !string.IsNullOrEmpty(value))) || tempValues.Any(v => v.Value.Any(value => !string.IsNullOrEmpty(value))))
@@ -692,7 +744,8 @@ namespace BPFC_System
                         txtResultTime1Outsole, txtResultTime2Outsole, txtResultTime3Outsole,
                         txtResultTime1Upper, txtResultTime2Upper, txtResultTime3Upper,
                         txtResultTemp1Outsole, txtResultTemp2Outsole, txtResultTemp3Outsole,
-                        txtResultTemp1Upper, txtResultTemp2Upper, txtResultTemp3Upper
+                        txtResultTemp1Upper, txtResultTemp2Upper, txtResultTemp3Upper,
+                        txtResultTempHeat_Upper, txtResultTimeHeat_Upper
                     );
 
                     dbManager.LogArticleActivity(username, reportDate, lineName, articleName, result, "Insert", department, selectedDate);
@@ -732,7 +785,7 @@ namespace BPFC_System
             }
             else
             {
-                string formattedDate = selectedDate.ToString("dd-MM-yyyy"); 
+                string formattedDate = selectedDate.ToString("dd-MM-yyyy");
                 cbxLines.SelectedIndex = 0;
 
                 ClearTextBoxes();
@@ -822,14 +875,14 @@ namespace BPFC_System
         (txtStdTime2Outsole, txtActualTime2Outsole, "Thời gian máy 2 Outsole"),
         (txtStdTemp2Outsole, txtActualTemp2Outsole, "Nhiệt độ máy 2 Outsole"),
         (txtStdTime3Outsole, txtActualTime3Outsole, "Thời gian máy 3 Outsole"),
-        (txtStdTemp3Outsole, txtActualTemp3Outsole, "Nhiệt độ máy 3 Outsole"),
+        (txtStdTemp3Upper, txtActualTemp3Outsole, "Nhiệt độ máy 3 Outsole"),
 
         (txtStdTime1Upper, txtActualTime1Upper, "Thời gian máy 1 Upper"),
         (txtStdTemp1Upper, txtActualTemp1Upper, "Nhiệt độ máy 1 Upper"),
         (txtStdTime2Upper, txtActualTime2Upper, "Thời gian máy 2 Upper"),
         (txtStdTemp2Upper, txtActualTemp2Upper, "Nhiệt độ máy 2 Upper"),
         (txtStdTime3Upper, txtActualTime3Upper, "Thời gian máy 3 Upper"),
-        (txtStdTemp3Upper, txtActualTemp3Upper, "Nhiệt độ máy 3 Upper"),
+        (txtStdTemp3Outsole, txtActualTemp3Upper, "Nhiệt độ máy 3 Upper"),
             };
 
             List<string> emptyActualTextBoxes = new List<string>();
@@ -853,8 +906,8 @@ namespace BPFC_System
         {
             List<TextBox> standardTextBoxes = new List<TextBox>
     {
-        txtStdTemp1Upper, txtStdTime1Upper, txtStdTemp2Upper, txtStdTime2Upper, txtStdTemp3Upper, txtStdTime3Upper,
-        txtStdTemp1Outsole, txtStdTime1Outsole, txtStdTemp2Outsole, txtStdTime2Outsole, txtStdTemp3Outsole, txtStdTime3Outsole
+        txtStdTemp1Upper, txtStdTime1Upper, txtStdTemp2Upper, txtStdTime2Upper, txtStdTemp3Outsole, txtStdTime3Upper,
+        txtStdTemp1Outsole, txtStdTime1Outsole, txtStdTemp2Outsole, txtStdTime2Outsole, txtStdTemp3Upper, txtStdTime3Outsole
     };
 
 
@@ -897,11 +950,19 @@ namespace BPFC_System
                 return handleParam;
             }
         }
+        private void txtStdTempHeat_Upper_Leave(object sender, EventArgs e)
+        {
+            CompareAndSetResult(txtActualTempHeat_Upper, txtStdTempHeat_Upper, txtResultTempHeat_Upper, txtArticle, txtModel);
+        }
 
 
         private void txtActualTemp1Upper_Leave(object sender, EventArgs e)
         {
             CompareAndSetResult(txtActualTemp1Upper, txtStdTemp1Upper, txtResultTemp1Upper, txtArticle, txtModel);
+        }
+        private void txtActualTempHeatUpper_Leave(object sender, EventArgs e)
+        {
+            CompareAndSetResult(txtActualTempHeat_Upper, txtStdTempHeat_Upper, txtResultTempHeat_Upper, txtArticle, txtModel);
         }
 
         private void txtActualTemp1Outsole_Leave(object sender, EventArgs e)
@@ -934,7 +995,7 @@ namespace BPFC_System
         {
             if (actualTemp == null && string.IsNullOrEmpty(stdValue))
             {
-                return null; // Cả hai đều null hoặc trống, trả về PASS
+                return null; // Cả hai đều null hoặc trống, trả về PASS (hoặc null nếu bạn dùng logic riêng)
             }
             else if (actualTemp == null)
             {
@@ -942,20 +1003,22 @@ namespace BPFC_System
             }
             else
             {
-                // Cả hai đều không null và không trống, tiến hành so sánh giá trị
-                string[] stdParts = stdValue.Split('±');
-                if (stdParts.Length == 2 && float.TryParse(stdParts[0].Trim(), out float stdTemp) && int.TryParse(stdParts[1].Trim(), out int tolerance))
+                stdValue = stdValue?.Replace("±5", "").Trim();
+
+                // Tiếp tục nếu stdValue còn nội dung
+                if (!string.IsNullOrEmpty(stdValue) && float.TryParse(stdValue, out float stdTemp))
                 {
+                    int tolerance = 5; // Mặc định ±5
                     float minTemp = stdTemp - tolerance;
                     float maxTemp = stdTemp + tolerance;
 
                     if (actualTemp >= minTemp && actualTemp <= maxTemp)
                     {
-                        return "PASS"; // So sánh giá trị và trả về PASS nếu thỏa mãn điều kiện
+                        return "PASS";
                     }
                 }
 
-                return "FAIL"; // Trả về FAIL nếu không thỏa mãn điều kiện so sánh
+                return "FAIL"; 
             }
         }
 
@@ -1168,6 +1231,12 @@ namespace BPFC_System
                 return false;
             }
         }
+        private void txtStdTimeHeat_Upper_Leave(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.Text = FormatTextBoxValue(textBox.Text);
+            CompareTimeValues(txtActualTimeHeat_Upper, txtStdTimeHeat_Upper, txtResultTimeHeat_Upper);
+        }
 
         private void txtActualTime1Upper_Leave(object sender, EventArgs e)
         {
@@ -1195,6 +1264,12 @@ namespace BPFC_System
             TextBox textBox = (TextBox)sender;
             textBox.Text = FormatTextBoxValue(textBox.Text);
             CompareTimeValues(txtActualTime1Outsole, txtStdTime1Outsole, txtResultTime1Outsole);
+        } 
+        private void txtActualTimeHeatUpper_Leave(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.Text = FormatTextBoxValue(textBox.Text);
+            CompareTimeValues(txtActualTimeHeat_Upper, txtStdTimeHeat_Upper, txtResultTimeHeat_Upper);
         }
         
         private void txtActualTime2Outsole_Leave(object sender, EventArgs e)
@@ -1313,10 +1388,13 @@ namespace BPFC_System
                 txtModel,
                 txtStdTemp1Upper,
                 txtStdTemp2Upper,
-                txtStdTemp3Upper,
+                txtStdTemp3Outsole,
+                txtActualTempHeat_Upper,
+                txtStdTempHeat_Upper,
+                txtResultTempHeat_Upper,
                 txtStdTemp1Outsole,
                 txtStdTemp2Outsole,
-                txtStdTemp3Outsole,
+                txtStdTemp3Upper,
                 txtStdTime1Upper,
                 txtStdTime2Upper,
                 txtStdTime3Upper,
@@ -1324,6 +1402,7 @@ namespace BPFC_System
                 txtStdTime2Outsole,
                 txtStdTime3Outsole,
                 txtStdTime1Upper,
+                txtStdTimeHeat_Upper,
                 txtStdTime2Upper,
                 txtStdTime3Upper,
                 txtStdTime1Outsole,
@@ -1336,12 +1415,14 @@ namespace BPFC_System
                 txtActualTemp2Outsole,
                 txtActualTemp3Outsole,
                 txtActualTime1Upper,
+                txtActualTimeHeat_Upper,
                 txtActualTime2Upper,
                 txtActualTime3Upper,
                 txtActualTime1Outsole,
                 txtActualTime2Outsole,
                 txtActualTime3Outsole,
                 txtResultTime1Upper,
+                txtResultTimeHeat_Upper,
                 txtResultTime2Upper,
                 txtResultTime3Upper,
                 txtResultTime1Outsole,
@@ -1478,6 +1559,45 @@ namespace BPFC_System
                 cbxLines.DroppedDown = true; 
                 return;
             }
+        }
+
+        private void txtStdTempHeat_Upper_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = sender as TextBox;
+            if (txt == null) return;
+
+            // Nếu đã chứa "±5" thì bỏ ra để tránh lặp lại
+            string rawText = txt.Text.Replace(" ±5", "").Trim();
+
+            // Nếu rỗng thì không xử lý
+            if (string.IsNullOrEmpty(rawText))
+                return;
+
+            // Nếu không phải số thì không xử lý
+            if (!int.TryParse(rawText, out int tempValue))
+                return;
+
+            // Ngắt sự kiện để tránh vòng lặp vô hạn
+            txtStdTempHeat_Upper.TextChanged -= txtStdTempHeat_Upper_TextChanged;
+
+            // Gán lại giá trị với ±5
+            txt.Text = $"{tempValue} ±5";
+
+            // Đặt con trỏ về cuối chuỗi
+            txt.SelectionStart = txt.Text.Length;
+
+            // Gắn lại sự kiện
+            txtStdTempHeat_Upper.TextChanged += txtStdTempHeat_Upper_TextChanged;
+        }
+
+        private void txtActualTempHeat_Upper_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtStdTempHeat_Upper_TextChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

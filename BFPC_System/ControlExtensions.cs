@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public static class ControlExtensions
     {

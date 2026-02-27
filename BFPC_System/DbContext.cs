@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using BPFC_System;
 
 public class BpfcDbContext
 {
@@ -10,7 +11,7 @@ public class BpfcDbContext
 
     public BpfcDbContext()
     {
-        connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+        connectionString = ConfigHelper.GetConnectionString("strCon");
     }
 
     public BpfcDbContext(string connectionString)
@@ -34,21 +35,27 @@ public class BpfcDbContext
             A.Model,
             A.ArticleName,
             AP.PartName,
+            TempR.StandardTemp_Heat,
             TempR.StandardTemp_1,
             TempR.StandardTemp_2,
             TempR.StandardTemp_3,
+            TempR.ActualTemp_Heat,
             TempR.ActualTemp_1,
             TempR.ActualTemp_2,
             TempR.ActualTemp_3,
+            TempR.Result_Heat AS ResultTemp_Heat,
             TempR.Result_1 AS ResultTemp_1,
             TempR.Result_2 AS ResultTemp_2,
             TempR.Result_3 AS ResultTemp_3,
+            TR.StandardTime_Heat,
             TR.StandardTime_1,
             TR.StandardTime_2,
             TR.StandardTime_3,
+            TR.ActualTime_Heat,
             TR.ActualTime_1,
             TR.ActualTime_2,
             TR.ActualTime_3,
+            TR.Result_Heat AS ResultTime_Heat,
             TR.Result_1 AS ResultTime_1,
             TR.Result_2 AS ResultTime_2,
             TR.Result_3 AS ResultTime_3,
@@ -89,18 +96,22 @@ public class BpfcDbContext
                             ArticleName = (string)reader["ArticleName"],
                             PartName = (string)reader["PartName"],
 
+                            ResultTemp_Heat = reader["ResultTemp_Heat"] == DBNull.Value ? null : (string)reader["ResultTemp_Heat"],
                             ResultTemp_1 = reader["ResultTemp_1"] == DBNull.Value ? null : (string)reader["ResultTemp_1"],
                             ResultTemp_2 = reader["ResultTemp_2"] == DBNull.Value ? null : (string)reader["ResultTemp_2"],
                             ResultTemp_3 = reader["ResultTemp_3"] == DBNull.Value ? null : (string)reader["ResultTemp_3"],
 
+                            ActualTime_Heat = reader["ActualTime_Heat"] == DBNull.Value ? null : (string)reader["ActualTime_Heat"],
                             ActualTime_1 = reader["ActualTime_1"] == DBNull.Value ? null : (string)reader["ActualTime_1"],
                             ActualTime_2 = reader["ActualTime_2"] == DBNull.Value ? null : (string)reader["ActualTime_2"],
                             ActualTime_3 = reader["ActualTime_3"] == DBNull.Value ? null : (string)reader["ActualTime_3"],
 
+                            StandardTime_Heat = reader["StandardTime_Heat"] == DBNull.Value ? null : (string)reader["StandardTime_Heat"],
                             StandardTime_1 = reader["StandardTime_1"] == DBNull.Value ? null : (string)reader["StandardTime_1"],
                             StandardTime_2 = reader["StandardTime_2"] == DBNull.Value ? null : (string)reader["StandardTime_2"],
                             StandardTime_3 = reader["StandardTime_3"] == DBNull.Value ? null : (string)reader["StandardTime_3"],
 
+                            ResultTime_Heat = reader["ResultTime_Heat"] == DBNull.Value ? null : (string)reader["ResultTime_Heat"],
                             ResultTime_1 = reader["ResultTime_1"] == DBNull.Value ? null : (string)reader["ResultTime_1"],
                             ResultTime_2 = reader["ResultTime_2"] == DBNull.Value ? null : (string)reader["ResultTime_2"],
                             ResultTime_3 = reader["ResultTime_3"] == DBNull.Value ? null : (string)reader["ResultTime_3"],
@@ -116,11 +127,13 @@ public class BpfcDbContext
                             ResultChemical_1 = reader["ResultChemical_1"] == DBNull.Value ? null : (string)reader["ResultChemical_1"],
                             ResultChemical_2 = reader["ResultChemical_2"] == DBNull.Value ? null : (string)reader["ResultChemical_2"],
                             ResultChemical_3 = reader["ResultChemical_3"] == DBNull.Value ? null : (string)reader["ResultChemical_3"],
-                        
+
+                            ActualTemp_Heat = HandleFloatDBNull(reader, "ActualTemp_Heat"),
                             ActualTemp_1 = HandleFloatDBNull(reader, "ActualTemp_1"),
                             ActualTemp_2 = HandleFloatDBNull(reader, "ActualTemp_2"),
                             ActualTemp_3 = HandleFloatDBNull(reader, "ActualTemp_3"),
 
+                            StandardTemp_Heat = HandleFloatDBNull(reader, "StandardTemp_Heat"),
                             StandardTemp_1 = HandleFloatDBNull(reader, "StandardTemp_1"),
                             StandardTemp_2 = HandleFloatDBNull(reader, "StandardTemp_2"),
                             StandardTemp_3 = HandleFloatDBNull(reader, "StandardTemp_3"),
@@ -351,24 +364,39 @@ public class BpfcDbContext
         public string Model { get; set; }
         public string ArticleName { get; set; }
         public string PartName { get; set; }
+
+        public float? StandardTemp_Heat { get; set; }
+        public float? ActualTemp_Heat { get; set; }
+        public string ResultTemp_Heat { get; set; }
+
+        public string StandardTime_Heat { get; set; }
+        public string ActualTime_Heat { get; set; }
+        public string ResultTime_Heat { get; set; }
+
         public float? StandardTemp_1 { get; set; }
         public float? ActualTemp_1 { get; set; }
         public string ResultTemp_1 { get; set; }
+
         public float? StandardTemp_2 { get; set; }
         public float? ActualTemp_2 { get; set; }
         public string ResultTemp_2 { get; set; }
+
         public float? StandardTemp_3 { get; set; }
         public float? ActualTemp_3 { get; set; }
         public string ResultTemp_3 { get; set; }
+
         public string StandardTime_1 { get; set; }
         public string ActualTime_1 { get; set; }
         public string ResultTime_1 { get; set; }
+
         public string StandardTime_2 { get; set; }
         public string ActualTime_2 { get; set; }
         public string ResultTime_2 { get; set; }
+
         public string StandardTime_3 { get; set; }
         public string ActualTime_3 { get; set; }
         public string ResultTime_3 { get; set; }
+
         public string StandardChemical_1 { get; set; }
         public string ActualChemical_1 { get; set; }
         public string ResultChemical_1 { get; set; }

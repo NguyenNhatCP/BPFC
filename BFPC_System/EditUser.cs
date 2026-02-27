@@ -4,7 +4,7 @@ using System;
 using System.Configuration;
 using System.Windows.Forms;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public partial class frmEditUser : DevExpress.XtraEditors.XtraForm
     {
@@ -15,7 +15,7 @@ namespace BFPC_System
         {
 
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
 
         }
 

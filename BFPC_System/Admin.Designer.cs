@@ -176,7 +176,7 @@
             this.ClientSize = new System.Drawing.Size(1298, 718);
             this.Controls.Add(this.splAdmin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.IconOptions.Image = global::BFPC_System.Properties.Resources.LogoAPH;
+            this.IconOptions.Image = global::BPFC_System.Properties.Resources.LogoAPH;
             this.MaximizeBox = false;
             this.Name = "frmAdmin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

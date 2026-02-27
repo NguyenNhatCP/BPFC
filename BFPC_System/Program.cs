@@ -4,7 +4,7 @@ using Microsoft.Win32;
 using System.Configuration;
 using BPFC_System;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     internal static class Program
     {
@@ -12,7 +12,7 @@ namespace BFPC_System
         static void Main()
         {
             // Lấy chuỗi kết nối từ cấu hình appconfig
-            string connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            string connectionString = ConfigHelper.GetConnectionString("strCon");
 
             // Khởi tạo tài khoản admin nếu chưa có
             InitializeAdminAccount(connectionString);

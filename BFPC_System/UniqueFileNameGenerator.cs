@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     internal class UniqueFileNameGenerator
     {

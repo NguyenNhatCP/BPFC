@@ -948,7 +948,7 @@
             this.ClientSize = new System.Drawing.Size(1298, 718);
             this.Controls.Add(this.splitContainer1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.IconOptions.Image = global::BFPC_System.Properties.Resources.LogoAPH;
+            this.IconOptions.Image = global::BPFC_System.Properties.Resources.LogoAPH;
             this.MaximizeBox = false;
             this.Name = "frmBpfc";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -1,4 +1,4 @@
-﻿namespace BFPC_System
+﻿namespace BPFC_System
 {
     partial class frmHome
     {
@@ -61,7 +61,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.BackgroundImage = global::BFPC_System.Properties.Resources.hq720;
+            this.splitContainer1.Panel2.BackgroundImage = global::BPFC_System.Properties.Resources.hq720;
             this.splitContainer1.Panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.splitContainer1.Panel2.Controls.Add(this.lblUser);
             this.splitContainer1.Panel2.Controls.Add(this.lblLogOut);
@@ -174,7 +174,7 @@
             this.ClientSize = new System.Drawing.Size(837, 463);
             this.Controls.Add(this.splitContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.IconOptions.Image = global::BFPC_System.Properties.Resources.LogoAPH;
+            this.IconOptions.Image = global::BPFC_System.Properties.Resources.LogoAPH;
             this.MaximizeBox = false;
             this.Name = "frmHome";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

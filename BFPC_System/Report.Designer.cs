@@ -1,4 +1,4 @@
-﻿namespace BFPC_System
+﻿namespace BPFC_System
 {
     partial class frmReport
     {
@@ -161,7 +161,7 @@
             this.ClientSize = new System.Drawing.Size(1127, 637);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.IconOptions.Image = global::BFPC_System.Properties.Resources.LogoAPH;
+            this.IconOptions.Image = global::BPFC_System.Properties.Resources.LogoAPH;
             this.Name = "frmReport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Báo cáo";

@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using System.Drawing;
 using DevExpress.Internal;
-using BFPC_System;
+using BPFC_System;
 namespace BPFC_System
 {
     public partial class CreateUsers : DevExpress.XtraEditors.XtraUserControl
@@ -19,13 +19,13 @@ namespace BPFC_System
         {
             InitializeComponent();
             dt = new DataTable();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
             this.DoubleBuffered = true;
         }
 
         private SqlConnection CreateSqlConnection()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            string connectionString = ConfigHelper.GetConnectionString("strCon");
             return new SqlConnection(connectionString);
         }
 
@@ -272,7 +272,7 @@ namespace BPFC_System
                 return;
             }
 
-            string connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            string connectionString = ConfigHelper.GetConnectionString("strCon");
             DatabaseManager dbManager = new DatabaseManager(connectionString);
 
 

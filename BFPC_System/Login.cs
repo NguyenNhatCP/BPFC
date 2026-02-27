@@ -19,7 +19,7 @@ namespace BPFC_System
             EnableDoubleBufferingForForm();
             EnableDoubleBufferingForControls();
 
-            string connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            string connectionString = ConfigHelper.GetConnectionString("strCon");
             LookAndFeel.UseWindowsXPTheme = true;
             txtPassword.UseSystemPasswordChar = true;
             dbManager = new DatabaseManager(connectionString);

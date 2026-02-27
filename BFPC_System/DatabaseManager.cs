@@ -17,17 +17,6 @@ namespace BPFC_System
     {
         public static string Username { get; set; }
     }
-    public static class ControlExtensions
-    {
-        public static void EnableDoubleBuffering(this Control control)
-        {
-            if (SystemInformation.TerminalServerSession)
-                return;
-
-            System.Reflection.PropertyInfo aProp = typeof(Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            aProp.SetValue(control, true, null);
-        }
-    }
     public class DatabaseManager : IDisposable
     {
         private readonly string connectionString;
@@ -786,66 +775,84 @@ namespace BPFC_System
                     float stdTemp1 = string.IsNullOrEmpty(values[1]) ? 0.0f : float.Parse(values[1].Replace(" ±5", ""));
                     float stdTemp2 = string.IsNullOrEmpty(values[4]) ? 0.0f : float.Parse(values[4].Replace(" ±5", ""));
                     float stdTemp3 = string.IsNullOrEmpty(values[7]) ? 0.0f : float.Parse(values[7].Replace(" ±5", ""));
+                    float stdTempHeat = string.IsNullOrEmpty(values[10]) ? 0.0f : float.Parse(values[10].Replace(" ±5", ""));
 
-                    // In ra console các giá trị trước khi thực hiện UPDATE (nếu cần)
-                    Console.WriteLine($"Updating TemperatureResults for Partname: {partName}");
-                    Console.WriteLine($"ArticlePartID: {articlePartId}");
-                    Console.WriteLine($"ActualTemp_1: {values[0]}, StdTemp_1: {stdTemp1}, Result_1: {values[2]}");
-                    Console.WriteLine($"ActualTemp_2: {values[3]}, StdTemp_2: {stdTemp2}, Result_2: {values[5]}");
-                    Console.WriteLine($"ActualTemp_3: {values[6]}, StdTemp_3: {stdTemp3}, Result_3: {values[8]}");
-                    Console.WriteLine($"ReportDate: {reportDate}");
+                    // Tạo danh sách các phần SET để tránh lỗi dấu phẩy
+                    List<string> setClauses = new List<string>();
+                    setClauses.Add("ArticlePartID = @ArticlePartID");
 
-                    string query = $@"UPDATE TemperatureResults
-                SET ArticlePartID = @ArticlePartID,
-                    {(string.IsNullOrEmpty(values[0]) ? "" : "ActualTemp_1 = @ActualTemp1,")}
-                    {(string.IsNullOrEmpty(values[1]) ? "" : "StandardTemp_1 = @StdTemp1,")}
-                    Result_1 = @Result1,
-                    {(string.IsNullOrEmpty(values[3]) ? "" : "ActualTemp_2 = @ActualTemp2,")}
-                    {(string.IsNullOrEmpty(values[4]) ? "" : "StandardTemp_2 = @StdTemp2,")}
-                    Result_2 = @Result2,
-                    {(string.IsNullOrEmpty(values[6]) ? "" : "ActualTemp_3 = @ActualTemp3,")}
-                    {(string.IsNullOrEmpty(values[7]) ? "" : "StandardTemp_3 = @StdTemp3,")}
-                    Result_3 = @Result3
-                WHERE LineID = @LineID AND Partname = @Partname AND CAST(ReportDate AS DATE) = CAST(@ReportDate AS DATE)";
+                    if (!string.IsNullOrEmpty(values[0]))
+                        setClauses.Add("ActualTemp_1 = @ActualTemp1");
 
-                    // Loại bỏ dấu phẩy dư thừa cuối cùng trước WHERE
-                    query = query.Replace(", WHERE", " WHERE");
+                    if (!string.IsNullOrEmpty(values[1]))
+                        setClauses.Add("StandardTemp_1 = @StdTemp1");
+
+                    setClauses.Add("Result_1 = @Result1");
+
+                    if (!string.IsNullOrEmpty(values[3]))
+                        setClauses.Add("ActualTemp_2 = @ActualTemp2");
+
+                    if (!string.IsNullOrEmpty(values[4]))
+                        setClauses.Add("StandardTemp_2 = @StdTemp2");
+
+                    setClauses.Add("Result_2 = @Result2");
+
+                    if (!string.IsNullOrEmpty(values[6]))
+                        setClauses.Add("ActualTemp_3 = @ActualTemp3");
+
+                    if (!string.IsNullOrEmpty(values[7]))
+                        setClauses.Add("StandardTemp_3 = @StdTemp3");
+
+                    setClauses.Add("Result_3 = @Result3");
+
+                    if (!string.IsNullOrEmpty(values[9]))
+                        setClauses.Add("ActualTemp_Heat = @ActualTempHeat");
+
+                    if (!string.IsNullOrEmpty(values[10]))
+                        setClauses.Add("StandardTemp_Heat = @StdTempHeat");
+
+                    setClauses.Add("Result_Heat = @ResultHeat");
+
+                    string query = $"UPDATE TemperatureResults SET {string.Join(", ", setClauses)} " +
+                                   "WHERE LineID = @LineID AND Partname = @Partname AND CAST(ReportDate AS DATE) = CAST(@ReportDate AS DATE)";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@LineID", lineId);
                         command.Parameters.AddWithValue("@Partname", partName);
-                        command.Parameters.AddWithValue("@ArticlePartID", (object)articlePartId ?? DBNull.Value);
+                        command.Parameters.AddWithValue("@ArticlePartID", articlePartId == 0 ? (object)DBNull.Value : articlePartId);
 
                         if (!string.IsNullOrEmpty(values[0]))
-                        {
                             command.Parameters.AddWithValue("@ActualTemp1", float.Parse(values[0]));
-                        }
+
                         if (!string.IsNullOrEmpty(values[1]))
-                        {
                             command.Parameters.AddWithValue("@StdTemp1", stdTemp1);
-                        }
-                        command.Parameters.AddWithValue("@Result1", (object)values[2] ?? DBNull.Value);
+
+                        command.Parameters.AddWithValue("@Result1", string.IsNullOrEmpty(values[2]) ? (object)DBNull.Value : values[2]);
 
                         if (!string.IsNullOrEmpty(values[3]))
-                        {
                             command.Parameters.AddWithValue("@ActualTemp2", float.Parse(values[3]));
-                        }
+
                         if (!string.IsNullOrEmpty(values[4]))
-                        {
                             command.Parameters.AddWithValue("@StdTemp2", stdTemp2);
-                        }
-                        command.Parameters.AddWithValue("@Result2", (object)values[5] ?? DBNull.Value);
+
+                        command.Parameters.AddWithValue("@Result2", string.IsNullOrEmpty(values[5]) ? (object)DBNull.Value : values[5]);
 
                         if (!string.IsNullOrEmpty(values[6]))
-                        {
                             command.Parameters.AddWithValue("@ActualTemp3", float.Parse(values[6]));
-                        }
+
                         if (!string.IsNullOrEmpty(values[7]))
-                        {
                             command.Parameters.AddWithValue("@StdTemp3", stdTemp3);
-                        }
-                        command.Parameters.AddWithValue("@Result3", (object)values[8] ?? DBNull.Value);
+
+                        command.Parameters.AddWithValue("@Result3", string.IsNullOrEmpty(values[8]) ? (object)DBNull.Value : values[8]);
+
+                        if (!string.IsNullOrEmpty(values[9]))
+                            command.Parameters.AddWithValue("@ActualTempHeat", float.Parse(values[9]));
+
+                        if (!string.IsNullOrEmpty(values[10]))
+                            command.Parameters.AddWithValue("@StdTempHeat", stdTempHeat);
+
+                        command.Parameters.AddWithValue("@ResultHeat", string.IsNullOrEmpty(values[11]) ? (object)DBNull.Value : values[11]);
 
                         command.Parameters.AddWithValue("@ReportDate", reportDate.Date);
 
@@ -854,6 +861,7 @@ namespace BPFC_System
                 }
             }
         }
+
 
         public void UpdateTimeResults(int lineId, Dictionary<string, int> partIds, Dictionary<string, string[]> timeResults, DateTime reportDate)
         {
@@ -865,47 +873,69 @@ namespace BPFC_System
                 {
                     string partName = entry.Key;
                     string[] values = entry.Value;
-
-                    // Lấy ArticlePartID từ Dictionary partIds
                     int articlePartId = partIds.ContainsKey(partName) ? partIds[partName] : 0;
 
-                    string query = $@"UPDATE TimeResults
-                SET ArticlePartID = @ArticlePartID,
+                    string query = @"
+UPDATE TimeResults
+SET ArticlePartID = @ArticlePartID,
+    ActualTime_1 = @ActualTime1,
+    StandardTime_1 = @StdTime1,
+    Result_1 = @Result1,
+    
+    ActualTime_2 = @ActualTime2,
+    StandardTime_2 = @StdTime2,
+    Result_2 = @Result2,
 
-                    ActualTime_1 = @ActualTime1,
-                    StandardTime_1 = @StdTime1,
-                    Result_1 = @Result1,
+    ActualTime_3 = @ActualTime3,
+    StandardTime_3 = @StdTime3,
+    Result_3 = @Result3,
 
-                    ActualTime_2 = @ActualTime2,
-                    StandardTime_2 = @StdTime2,
-                    Result_2 = @Result2,
-
-                    ActualTime_3 = @ActualTime3,
-                    StandardTime_3 = @StdTime3,
-                    Result_3 = @Result3
-
-                WHERE LineID = @LineID AND Partname = @Partname AND CAST(ReportDate AS DATE) = CAST(@ReportDate AS DATE)";
+    ActualTime_Heat = @ActualTimeHeat,
+    StandardTime_Heat = @StdTimeHeat,
+    Result_Heat = @ResultHeat
+WHERE LineID = @LineID AND Partname = @Partname AND CAST(ReportDate AS DATE) = CAST(@ReportDate AS DATE)";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@LineID", lineId);
                         command.Parameters.AddWithValue("@Partname", partName);
-                        command.Parameters.AddWithValue("@ArticlePartID", (object)articlePartId ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@ActualTime1", (object)values[0] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@StdTime1", (object)values[1] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@Result1", (object)values[2] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@ActualTime2", (object)values[3] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@StdTime2", (object)values[4] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@Result2", (object)values[5] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@ActualTime3", (object)values[6] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@StdTime3", (object)values[7] ?? DBNull.Value);
-                        command.Parameters.AddWithValue("@Result3", (object)values[8] ?? DBNull.Value);
+                        command.Parameters.AddWithValue("@ArticlePartID", articlePartId == 0 ? (object)DBNull.Value : articlePartId);
                         command.Parameters.AddWithValue("@ReportDate", reportDate.Date);
+
+                        // Hàm helper nhỏ để chuyển chuỗi null hoặc rỗng thành DBNull.Value
+                        object GetDbValue(string s) => string.IsNullOrWhiteSpace(s) ? (object)DBNull.Value : s;
+
+                        // Time 1
+                        command.Parameters.AddWithValue("@ActualTime1", GetDbValue(values[0]));
+                        command.Parameters.AddWithValue("@StdTime1", GetDbValue(values[1]));
+                        command.Parameters.AddWithValue("@Result1", GetDbValue(values[2]));
+
+                        // Time 2
+                        command.Parameters.AddWithValue("@ActualTime2", GetDbValue(values[3]));
+                        command.Parameters.AddWithValue("@StdTime2", GetDbValue(values[4]));
+                        command.Parameters.AddWithValue("@Result2", GetDbValue(values[5]));
+
+                        // Time 3
+                        command.Parameters.AddWithValue("@ActualTime3", GetDbValue(values[6]));
+                        command.Parameters.AddWithValue("@StdTime3", GetDbValue(values[7]));
+                        command.Parameters.AddWithValue("@Result3", GetDbValue(values[8]));
+
+                        // Heat
+                        command.Parameters.AddWithValue("@ActualTimeHeat", GetDbValue(values[9]));
+                        command.Parameters.AddWithValue("@StdTimeHeat", GetDbValue(values[10]));
+                        command.Parameters.AddWithValue("@ResultHeat", GetDbValue(values[11]));
 
                         command.ExecuteNonQuery();
                     }
                 }
             }
+        }
+
+        private object ParseNullableFloat(string input)
+        {
+            if (float.TryParse(input, out float result))
+                return result;
+            return DBNull.Value;
         }
 
         public void SaveAllResults(string articleName, string lineName, Dictionary<string, string[]> timeResults, Dictionary<string, string[]> tempResults, int userId, DateTime reportDate)
@@ -959,29 +989,39 @@ namespace BPFC_System
                 }
             }
         }
-
         private void SaveTimeResultsForPart(SqlConnection connection, int lineId, int articlePartId, string partName, string[] timeResults, int userId, DateTime reportDate)
         {
-            string query = @"INSERT INTO TimeResults (LineID, ArticlePartID, Partname, ActualTime_1, StandardTime_1, Result_1, ActualTime_2, StandardTime_2, Result_2, ActualTime_3, StandardTime_3, Result_3, RecordedBy, ReportDate)
-      VALUES (@LineID, @ArticlePartID, @Partname, @ActualTime1, @StdTime1, @Result1, @ActualTime2, @StdTime2, @Result2, @ActualTime3, @StdTime3, @Result3, @RecordedBy, @ReportDate)";
+            string query = @"INSERT INTO TimeResults 
+(LineID, ArticlePartID, Partname, ActualTime_1, StandardTime_1, Result_1, 
+ ActualTime_2, StandardTime_2, Result_2, ActualTime_3, StandardTime_3, Result_3, 
+ ActualTime_Heat, StandardTime_Heat, Result_Heat, RecordedBy, ReportDate)
+VALUES 
+(@LineID, @ArticlePartID, @Partname, @ActualTime1, @StdTime1, @Result1, 
+ @ActualTime2, @StdTime2, @Result2, @ActualTime3, @StdTime3, @Result3, 
+ @ActualTimeHeat, @StdTimeHeat, @ResultHeat, @RecordedBy, @ReportDate)";
 
             using (SqlCommand command = new SqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@LineID", lineId);
-                command.Parameters.AddWithValue("@ArticlePartID", (object)articlePartId ?? DBNull.Value);
+                command.Parameters.AddWithValue("@ArticlePartID", articlePartId);
                 command.Parameters.AddWithValue("@Partname", partName);
 
-                command.Parameters.AddWithValue("@ActualTime1", (object)timeResults[0] ?? DBNull.Value);
-                command.Parameters.AddWithValue("@StdTime1", (object)timeResults[1] ?? DBNull.Value);
-                command.Parameters.AddWithValue("@Result1", (object)timeResults[2] ?? DBNull.Value);
+                // Chuyển trực tiếp string hoặc DBNull.Value nếu null hoặc trắng
+                command.Parameters.AddWithValue("@ActualTime1", string.IsNullOrWhiteSpace(timeResults[0]) ? (object)DBNull.Value : timeResults[0]);
+                command.Parameters.AddWithValue("@StdTime1", string.IsNullOrWhiteSpace(timeResults[1]) ? (object)DBNull.Value : timeResults[1]);
+                command.Parameters.AddWithValue("@Result1", string.IsNullOrWhiteSpace(timeResults[2]) ? (object)DBNull.Value : timeResults[2]);
 
-                command.Parameters.AddWithValue("@ActualTime2", (object)timeResults[3] ?? DBNull.Value);
-                command.Parameters.AddWithValue("@StdTime2", (object)timeResults[4] ?? DBNull.Value);
-                command.Parameters.AddWithValue("@Result2", (object)timeResults[5] ?? DBNull.Value);
+                command.Parameters.AddWithValue("@ActualTime2", string.IsNullOrWhiteSpace(timeResults[3]) ? (object)DBNull.Value : timeResults[3]);
+                command.Parameters.AddWithValue("@StdTime2", string.IsNullOrWhiteSpace(timeResults[4]) ? (object)DBNull.Value : timeResults[4]);
+                command.Parameters.AddWithValue("@Result2", string.IsNullOrWhiteSpace(timeResults[5]) ? (object)DBNull.Value : timeResults[5]);
 
-                command.Parameters.AddWithValue("@ActualTime3", (object)timeResults[6] ?? DBNull.Value);
-                command.Parameters.AddWithValue("@StdTime3", (object)timeResults[7] ?? DBNull.Value);
-                command.Parameters.AddWithValue("@Result3", (object)timeResults[8] ?? DBNull.Value);
+                command.Parameters.AddWithValue("@ActualTime3", string.IsNullOrWhiteSpace(timeResults[6]) ? (object)DBNull.Value : timeResults[6]);
+                command.Parameters.AddWithValue("@StdTime3", string.IsNullOrWhiteSpace(timeResults[7]) ? (object)DBNull.Value : timeResults[7]);
+                command.Parameters.AddWithValue("@Result3", string.IsNullOrWhiteSpace(timeResults[8]) ? (object)DBNull.Value : timeResults[8]);
+
+                command.Parameters.AddWithValue("@ActualTimeHeat", string.IsNullOrWhiteSpace(timeResults[9]) ? (object)DBNull.Value : timeResults[9]);
+                command.Parameters.AddWithValue("@StdTimeHeat", string.IsNullOrWhiteSpace(timeResults[10]) ? (object)DBNull.Value : timeResults[10]);
+                command.Parameters.AddWithValue("@ResultHeat", string.IsNullOrWhiteSpace(timeResults[11]) ? (object)DBNull.Value : timeResults[11]);
 
                 command.Parameters.AddWithValue("@RecordedBy", userId);
                 command.Parameters.AddWithValue("@ReportDate", reportDate.Date);
@@ -989,11 +1029,10 @@ namespace BPFC_System
                 command.ExecuteNonQuery();
             }
         }
-
         private void SaveTemperatureResultsForPart(SqlConnection connection, int lineId, int articlePartId, string partName, string[] tempResults, int userId, DateTime reportDate)
         {
-            string query = @"INSERT INTO TemperatureResults (LineID, ArticlePartID, Partname, ActualTemp_1, StandardTemp_1, Result_1, ActualTemp_2, StandardTemp_2, Result_2, ActualTemp_3, StandardTemp_3, Result_3, RecordedBy, ReportDate)
-    VALUES (@LineID, @ArticlePartID, @Partname, @ActualTemp1, @StdTemp1, @Result1, @ActualTemp2, @StdTemp2, @Result2, @ActualTemp3, @StdTemp3, @Result3, @RecordedBy, @ReportDate)";
+            string query = @"INSERT INTO TemperatureResults (LineID, ArticlePartID, Partname, ActualTemp_1, StandardTemp_1, Result_1, ActualTemp_2, StandardTemp_2, Result_2, ActualTemp_3, StandardTemp_3, Result_3, ActualTemp_Heat, StandardTemp_Heat, Result_Heat, RecordedBy, ReportDate)
+    VALUES (@LineID, @ArticlePartID, @Partname, @ActualTemp1, @StdTemp1, @Result1, @ActualTemp2, @StdTemp2, @Result2, @ActualTemp3, @StdTemp3, @Result3, @ActualTempHeat, @StdTempHeat, @ResultHeat, @RecordedBy, @ReportDate)";
 
             using (SqlCommand command = new SqlCommand(query, connection))
             {
@@ -1044,10 +1083,42 @@ namespace BPFC_System
 
                 command.Parameters.AddWithValue("@Result3", tempResults[8] != null ? (object)tempResults[8] : DBNull.Value);
 
+
+                if (float.TryParse(tempResults[9], out float actualTempHeat))
+                    command.Parameters.AddWithValue("@ActualTempHeat", actualTempHeat);
+                else
+                    command.Parameters.Add("@ActualTempHeat", SqlDbType.Float).Value = DBNull.Value;
+                string standardTempHeat = tempResults[10]?.Replace(" ±5", string.Empty);
+                if (float.TryParse(standardTempHeat, out float stdTempHeat))
+                    command.Parameters.AddWithValue("@StdTempHeat", stdTempHeat);
+                else
+                    command.Parameters.Add("@StdTempHeat", SqlDbType.Float).Value = DBNull.Value;
+
+                command.Parameters.AddWithValue("@ResultHeat", tempResults[11] != null ? (object)tempResults[11] : DBNull.Value);
+
                 command.Parameters.AddWithValue("@RecordedBy", userId);
                 command.Parameters.AddWithValue("@ReportDate", reportDate.Date);
 
                 command.ExecuteNonQuery();
+            }
+        }
+        private void AddFloatParameter(SqlCommand command, string paramName, string[] source, int index)
+        {
+            if (index >= source.Length || !float.TryParse(source[index], out float value))
+                command.Parameters.Add(paramName, SqlDbType.Float).Value = DBNull.Value;
+            else
+                command.Parameters.Add(paramName, SqlDbType.Float).Value = value;
+        }
+
+        private void AddStringParameter(SqlCommand command, string paramName, string[] tempResults, int index)
+        {
+            if (tempResults.Length > index && !string.IsNullOrEmpty(tempResults[index]))
+            {
+                command.Parameters.AddWithValue(paramName, tempResults[index]);
+            }
+            else
+            {
+                command.Parameters.Add(paramName, SqlDbType.NVarChar).Value = DBNull.Value;
             }
         }
 
@@ -1148,6 +1219,13 @@ namespace BPFC_System
 
                         command.Parameters.AddWithValue("@ReportDate", reportDate);
 
+                        // Build the SQL with parameters replaced for logging
+                        var debugSql = query;
+                        foreach (SqlParameter param in command.Parameters)
+                        {
+                            string value = (param.Value == DBNull.Value || param.Value == null) ? "NULL" : $"'{param.Value.ToString()}'";
+                            debugSql = debugSql.Replace(param.ParameterName, value);
+                        }
                         command.ExecuteNonQuery();
                     }
                 }
@@ -1195,6 +1273,14 @@ namespace BPFC_System
                 command.Parameters.AddWithValue("@Result3", (chemicalResults.Length > 8) ? (object)chemicalResults[8] ?? DBNull.Value : DBNull.Value);
 
                 command.Parameters.AddWithValue("@ReportDate", reportDate);
+
+                // Build the SQL with parameters replaced for logging
+                var debugSql = query;
+                foreach (SqlParameter param in command.Parameters)
+                {
+                    string value = (param.Value == DBNull.Value || param.Value == null) ? "NULL" : $"'{param.Value.ToString()}'";
+                    debugSql = debugSql.Replace(param.ParameterName, value);
+                }
 
                 command.ExecuteNonQuery();
             }
@@ -1768,8 +1854,10 @@ namespace BPFC_System
 
                             if (partName == "Upper")
                             {
+                                articleData.TempHeatUpper = GetNullableFloat(reader, "StandardTemp_Heat");
                                 articleData.Temp1Upper = GetNullableFloat(reader, "StandardTemp_1");
                                 articleData.Time1Upper = reader["StandardTime_1"].ToString();
+                                articleData.TimeHeatUpper = reader["StandardTime_Heat"].ToString();
                                 articleData.Chemical1Upper = reader["StandardChemical_1"].ToString();
 
                                 articleData.Temp2Upper = GetNullableFloat(reader, "StandardTemp_2");
@@ -1896,6 +1984,52 @@ namespace BPFC_System
                 cmdUpdatePart.Parameters.AddWithValue("@UpdatedBy", updatedByUserId);
 
                 cmdUpdatePart.ExecuteNonQuery();
+            }
+        }
+        public void UpdateArticlePart_Heat(string articleName, double? standardTemp, string standardTime)
+        {
+            string partName = "Upper";
+            int? articleId = null;
+
+            using (SqlConnection conn = new SqlConnection(connectionString)) 
+            {
+                conn.Open();
+
+                // Lấy ArticleID từ ArticleName
+                string getIdQuery = "SELECT ArticleID FROM Articles WHERE ArticleName = @ArticleName";
+                using (SqlCommand getIdCmd = new SqlCommand(getIdQuery, conn))
+                {
+                    getIdCmd.Parameters.AddWithValue("@ArticleName", articleName);
+                    object result = getIdCmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        articleId = Convert.ToInt32(result);
+                    }
+                }
+
+                if (!articleId.HasValue)
+                {
+                    throw new Exception("ArticleID not found for ArticleName: " + articleName);
+                }
+
+                // Cập nhật dữ liệu
+                string updatePartQuery =
+                    "UPDATE ArticleParts SET StandardTemp_Heat = @StandardTempHeat, StandardTime_Heat = @StandardTimeHeat " +
+                    "WHERE ArticleID = @ArticleID AND PartName = @PartName";
+
+                using (SqlCommand cmdUpdatePart = new SqlCommand(updatePartQuery, conn))
+                {
+                    cmdUpdatePart.Parameters.AddWithValue("@ArticleID", articleId.Value);
+                    cmdUpdatePart.Parameters.AddWithValue("@PartName", partName);
+
+                    object tempValue = standardTemp.HasValue ? (object)standardTemp.Value : DBNull.Value;
+                    object timeValue = string.IsNullOrWhiteSpace(standardTime) ? (object)DBNull.Value : standardTime;
+
+                    cmdUpdatePart.Parameters.AddWithValue("@StandardTempHeat", tempValue);
+                    cmdUpdatePart.Parameters.AddWithValue("@StandardTimeHeat", timeValue);
+
+                    cmdUpdatePart.ExecuteNonQuery();
+                }
             }
         }
     }

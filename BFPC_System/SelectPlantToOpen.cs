@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Windows.Forms;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public partial class frmSelectPlant : DevExpress.XtraEditors.XtraForm
     {
@@ -14,7 +14,7 @@ namespace BFPC_System
         public frmSelectPlant()
         {
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
             dbManager = new DatabaseManager(connectionString);
             LoadPlantNames();
         }

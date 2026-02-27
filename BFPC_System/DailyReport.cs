@@ -11,7 +11,7 @@ using System.Drawing;
 using static BpfcDbContext;
 using System.ComponentModel;
 
-namespace BFPC_System
+namespace BPFC_System
 {
     public partial class DailyReport : XtraUserControl
     {
@@ -23,7 +23,7 @@ namespace BFPC_System
         public DailyReport()
         {
             InitializeComponent();
-            connectionString = ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+            connectionString = ConfigHelper.GetConnectionString("strCon");
             dbManager = new DatabaseManager(connectionString);
             dbContext = new BpfcDbContext(connectionString);
             LoadPlantNames();

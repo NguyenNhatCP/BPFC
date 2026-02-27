@@ -7,7 +7,7 @@ namespace BPFC_System
 {
     public partial class frmChangePassword : XtraForm
     {
-        private readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["strCon"].ConnectionString;
+        private readonly string connectionString = ConfigHelper.GetConnectionString("strCon");
 
         public frmChangePassword()
         {
