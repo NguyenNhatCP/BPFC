@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Microsoft.Win32;
-using System.Configuration;
-using BPFC_System;
 
 namespace BPFC_System
 {

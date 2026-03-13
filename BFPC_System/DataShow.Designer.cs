@@ -31,12 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataShow));
             this.panel1 = new System.Windows.Forms.Panel();
             this.splManage = new System.Windows.Forms.SplitContainer();
+            this.sqlCommand1 = new Microsoft.Data.SqlClient.SqlCommand();
+            this.sqlCommand2 = new Microsoft.Data.SqlClient.SqlCommand();
             this.btnRandomCheck = new DevExpress.XtraEditors.SimpleButton();
             this.btnComposeEmail = new DevExpress.XtraEditors.SimpleButton();
             this.btnExport = new DevExpress.XtraEditors.SimpleButton();
             this.btnUserManage = new DevExpress.XtraEditors.SimpleButton();
-            this.sqlCommand1 = new Microsoft.Data.SqlClient.SqlCommand();
-            this.sqlCommand2 = new Microsoft.Data.SqlClient.SqlCommand();
+            this.btnCheck = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.splManage)).BeginInit();
             this.splManage.Panel1.SuspendLayout();
             this.splManage.Panel2.SuspendLayout();
@@ -64,6 +65,7 @@
             // splManage.Panel1
             // 
             this.splManage.Panel1.BackColor = System.Drawing.Color.Transparent;
+            this.splManage.Panel1.Controls.Add(this.btnCheck);
             this.splManage.Panel1.Controls.Add(this.btnRandomCheck);
             this.splManage.Panel1.Controls.Add(this.btnComposeEmail);
             this.splManage.Panel1.Controls.Add(this.btnExport);
@@ -77,6 +79,16 @@
             this.splManage.SplitterDistance = 184;
             this.splManage.SplitterWidth = 1;
             this.splManage.TabIndex = 2;
+            // 
+            // sqlCommand1
+            // 
+            this.sqlCommand1.CommandTimeout = 30;
+            this.sqlCommand1.EnableOptimizedParameterBinding = false;
+            // 
+            // sqlCommand2
+            // 
+            this.sqlCommand2.CommandTimeout = 30;
+            this.sqlCommand2.EnableOptimizedParameterBinding = false;
             // 
             // btnRandomCheck
             // 
@@ -146,15 +158,22 @@
             this.btnUserManage.Text = "Hằng ngày";
             this.btnUserManage.Click += new System.EventHandler(this.btnDaily_Click);
             // 
-            // sqlCommand1
+            // btnCheck
             // 
-            this.sqlCommand1.CommandTimeout = 30;
-            this.sqlCommand1.EnableOptimizedParameterBinding = false;
-            // 
-            // sqlCommand2
-            // 
-            this.sqlCommand2.CommandTimeout = 30;
-            this.sqlCommand2.EnableOptimizedParameterBinding = false;
+            this.btnCheck.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCheck.Appearance.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCheck.Appearance.Options.UseFont = true;
+            this.btnCheck.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("simpleButton1.ImageOptions.Image")));
+            this.btnCheck.Location = new System.Drawing.Point(15, 236);
+            this.btnCheck.LookAndFeel.SkinMaskColor = System.Drawing.Color.SkyBlue;
+            this.btnCheck.LookAndFeel.SkinName = "Coffee";
+            this.btnCheck.LookAndFeel.UseDefaultLookAndFeel = false;
+            this.btnCheck.Name = "btnCheck";
+            this.btnCheck.Size = new System.Drawing.Size(154, 40);
+            this.btnCheck.TabIndex = 2;
+            this.btnCheck.Text = "Kiểm tra ART";
+            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
             // DataShow
             // 
@@ -183,5 +202,6 @@
         private Microsoft.Data.SqlClient.SqlCommand sqlCommand2;
         private DevExpress.XtraEditors.SimpleButton btnComposeEmail;
         private DevExpress.XtraEditors.SimpleButton btnRandomCheck;
+        private DevExpress.XtraEditors.SimpleButton btnCheck;
     }
 }

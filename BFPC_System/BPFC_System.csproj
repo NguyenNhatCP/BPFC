@@ -29,7 +29,7 @@
     <InstallUrl>http://10.30.0.116:8080/Audit%2520System/</InstallUrl>
     <UpdateUrl>http://10.30.0.116:8080/Audit%2520System/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>117</ApplicationRevision>
+    <ApplicationRevision>119</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -458,6 +458,12 @@
     </Compile>
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="DbContext.cs" />
+    <Compile Include="frmCheckDiffLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCheckDiffLine.Designer.cs">
+      <DependentUpon>frmCheckDiffLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmQC.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -547,6 +553,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditUser.resx">
       <DependentUpon>EditUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCheckDiffLine.resx">
+      <DependentUpon>frmCheckDiffLine.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmQC.resx">
       <DependentUpon>frmQC.cs</DependentUpon>

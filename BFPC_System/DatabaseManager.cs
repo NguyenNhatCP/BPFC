@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static BPFC_System.frmBpfc;
 
@@ -2031,6 +2032,116 @@ VALUES
                     cmdUpdatePart.ExecuteNonQuery();
                 }
             }
+        }
+        // Fetch all LineIDs from the database
+        public async Task<DataTable> GetAllLinesAsync()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT LineID, LineName FROM ProductionLines";
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                {
+                    DataTable dt = new DataTable();
+                    await Task.Run(() => adapter.Fill(dt));
+                    return dt;
+                }
+            }
+        }
+        public async Task<DataTable> GetArticlesDataAsync()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = @"
+            SELECT 
+                p.PartID,
+                a.ArticleName
+            FROM ArticleParts p
+            JOIN Articles a ON a.ArticleID = p.ArticleID";
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                {
+                    DataTable dt = new DataTable();
+                    await Task.Run(() => adapter.Fill(dt));
+                    return dt;
+                }
+            }
+        }
+        // Fetch data from a table based on the selected LineID and date
+        public async Task<DataTable> GetDataAsync(string tableName, int lineID, DateTime selectedDate)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = $@"
+                    SELECT * 
+                    FROM {tableName}
+                    WHERE LineID = @LineID AND CONVERT(DATE, ReportDate) = @ReportDate";
+
+                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                adapter.SelectCommand.Parameters.AddWithValue("@LineID", lineID);
+                adapter.SelectCommand.Parameters.AddWithValue("@ReportDate", selectedDate);
+
+                DataTable dataTable = new DataTable();
+                await Task.Run(() => adapter.Fill(dataTable));
+                return dataTable;
+            }
+        }
+
+        // Find differences in articles between the three datasets
+        public DataTable FindDifferences(DataTable chemicalData, DataTable timeData, DataTable temperatureData, DataTable articlesData)
+        {
+            // merged by ArticlePartID and LineID
+            var merged = from chemical in chemicalData.AsEnumerable()
+                         join time in timeData.AsEnumerable()
+                         on new { LineID = chemical.Field<int>("LineID"), ArticlePartID = chemical.Field<int>("ArticlePartID") }
+                         equals new { LineID = time.Field<int>("LineID"), ArticlePartID = time.Field<int>("ArticlePartID") }
+                         into timeJoin
+                         from time in timeJoin.DefaultIfEmpty()
+                         join temp in temperatureData.AsEnumerable()
+                         on new { LineID = chemical.Field<int>("LineID"), ArticlePartID = chemical.Field<int>("ArticlePartID") }
+                         equals new { LineID = temp.Field<int>("LineID"), ArticlePartID = temp.Field<int>("ArticlePartID") }
+                         into tempJoin
+                         from temp in tempJoin.DefaultIfEmpty()
+                         select new
+                         {
+                             LineID = chemical.Field<int>("LineID"),
+                             ArticlePartID = chemical.Field<int>("ArticlePartID"),
+                             Chemical_Article_Exists = true,
+                             Time_Article_Exists = time != null,
+                             Temperature_Article_Exists = temp != null
+                         };
+
+            // Convert to DataTable
+            DataTable resultTable = new DataTable();
+            resultTable.Columns.Add("LineID", typeof(int));
+            resultTable.Columns.Add("ArticlePartID", typeof(int));
+            resultTable.Columns.Add("ArticleName", typeof(string));
+            resultTable.Columns.Add("Chemical_Article_Exists", typeof(bool));
+            resultTable.Columns.Add("Time_Article_Exists", typeof(bool));
+            resultTable.Columns.Add("Temperature_Article_Exists", typeof(bool));
+
+            foreach (var row in merged)
+            {
+                // Lookup ArticleName from articlesData table
+                var articleRow = articlesData.AsEnumerable()
+                    .FirstOrDefault(a => a.Field<int>("PartID") == row.ArticlePartID);
+
+                string articleName = articleRow != null ? articleRow.Field<string>("ArticleName") : row.ArticlePartID.ToString();
+
+                // Only show differences
+                if (!row.Time_Article_Exists || !row.Temperature_Article_Exists)
+                {
+                    resultTable.Rows.Add(
+                        row.LineID,
+                        row.ArticlePartID,
+                        articleName,
+                        row.Chemical_Article_Exists,
+                        row.Time_Article_Exists,
+                        row.Temperature_Article_Exists
+                    );
+                }
+            }
+
+            return resultTable;
         }
     }
 }

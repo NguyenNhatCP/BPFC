@@ -1,11 +1,4 @@
-﻿using BPFC_System;
-using DevExpress.XtraPrinting.Native;
-using Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Interop.Outlook;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-using OfficeOpenXml.Table.PivotTable;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -15,6 +8,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Outlook;
 using Excel = Microsoft.Office.Interop.Excel;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
@@ -528,6 +523,33 @@ namespace BPFC_System
         {
             frmRandomCheck randomCheckForm = new frmRandomCheck();
             randomCheckForm.Show();
+        }
+        private frmCheckDiffLine frmCheck;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCheck_Click(object sender, EventArgs e)
+        {
+            // Check frmCheck, not reportForm
+            if (frmCheck == null || frmCheck.IsDisposed)
+            {
+                frmCheck = new frmCheckDiffLine();
+                frmCheck.ShowHomeButton = true;
+                frmCheck.Show();
+            }
+            else
+            {
+                if (frmCheck.WindowState == FormWindowState.Minimized)
+                {
+                    frmCheck.WindowState = FormWindowState.Normal;
+                }
+
+                frmCheck.BringToFront();
+                frmCheck.Focus();
+            }
         }
     }
 }
