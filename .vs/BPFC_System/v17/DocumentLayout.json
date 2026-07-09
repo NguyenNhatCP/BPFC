@@ -3,23 +3,7 @@
   "WorkspaceRootPath": "D:\\reps\\BPFC\\BFPC_System\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|d:\\reps\\bpfc\\bfpc_system\\bfpc_system\\frmcheckdiffline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\frmcheckdiffline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\frmcheckdiffline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\frmcheckdiffline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\datashow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\datashow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|d:\\reps\\bpfc\\bfpc_system\\bfpc_system\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\databasemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -31,16 +15,48 @@
       "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\plant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\plant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|d:\\reps\\bpfc\\bfpc_system\\bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|d:\\reps\\bpfc\\bfpc_system\\bfpc_system\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\randomcheck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\randomcheck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\datashow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\datashow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\report.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\manageshow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\manageshow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
@@ -55,36 +71,12 @@
       "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\home.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\randomcheck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\randomcheck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\plant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\plant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\frmqc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\frmqc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\home.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\home.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\createplant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\createplant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\createusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -101,18 +93,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\meic (1).ico||{177559E0-D141-11D0-92DF-00A0C9138C45}",
       "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\meic (1).ico||{177559E0-D141-11D0-92DF-00A0C9138C45}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\warehouse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\selectplanttoopen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\randomcheck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|solutionrelative:bfpc_system\\randomcheck.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{461C4E3A-4172-4044-B85D-8698F5F3C557}|BFPC_System\\BPFC_System.csproj|D:\\reps\\BPFC\\BFPC_System\\bfpc_system\\edituser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -194,20 +174,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 228,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "Plant.cs",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Plant.cs",
               "RelativeDocumentMoniker": "BFPC_System\\Plant.cs",
               "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Plant.cs",
               "RelativeToolTip": "BFPC_System\\Plant.cs",
-              "ViewState": "AgIAAJcCAAAAAAAAAAArwKwCAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAMYCAAAAAAAAAADwv+gCAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T01:16:28.673Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -239,43 +220,82 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Report.cs [Design]",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Report.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\Report.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Report.cs [Design]",
-              "RelativeToolTip": "BFPC_System\\Report.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T06:49:53.941Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "frmCheckDiffLine.cs [Design]",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\frmCheckDiffLine.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\frmCheckDiffLine.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\frmCheckDiffLine.cs [Design]",
-              "RelativeToolTip": "BFPC_System\\frmCheckDiffLine.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:11:17.509Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "frmCheckDiffLine.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\frmCheckDiffLine.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\frmCheckDiffLine.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\frmCheckDiffLine.cs",
-              "RelativeToolTip": "BFPC_System\\frmCheckDiffLine.cs",
-              "ViewState": "AgIAAG0AAAAAAAAAAAAcwIUAAAAuAAAAAAAAAA==",
+              "Title": "DatabaseManager.cs",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DatabaseManager.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\DatabaseManager.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DatabaseManager.cs",
+              "RelativeToolTip": "BFPC_System\\DatabaseManager.cs",
+              "ViewState": "AgIAAMoDAAAAAAAAAADwv90DAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:16:48.575Z",
+              "WhenOpened": "2026-07-08T08:08:18.749Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Warehouse.cs [Design]",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\Warehouse.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs [Design]",
+              "RelativeToolTip": "BFPC_System\\Warehouse.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T07:35:15.376Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 10,
+              "Title": "DailyReport.cs [Design]",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DailyReport.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\DailyReport.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DailyReport.cs [Design]",
+              "RelativeToolTip": "BFPC_System\\DailyReport.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-06T09:22:43.989Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DailyReport.cs",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DailyReport.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\DailyReport.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DailyReport.cs",
+              "RelativeToolTip": "BFPC_System\\DailyReport.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAD4vzQAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-04T00:51:47.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Plant.cs [Design]",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Plant.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\Plant.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Plant.cs [Design]",
+              "RelativeToolTip": "BFPC_System\\Plant.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-03T09:29:56.062Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Report.cs",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Report.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\Report.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Report.cs",
+              "RelativeToolTip": "BFPC_System\\Report.cs",
+              "ViewState": "AgIAAEEDAAAAAAAAAAAkwF4DAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-19T06:51:10.715Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "Admin.cs [Design]",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Admin.cs",
               "RelativeDocumentMoniker": "BFPC_System\\Admin.cs",
@@ -287,38 +307,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "DatabaseManager.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DatabaseManager.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\DatabaseManager.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DatabaseManager.cs",
-              "RelativeToolTip": "BFPC_System\\DatabaseManager.cs",
-              "ViewState": "AgIAAOMHAAAAAAAAAAAQwPQHAAAOAAAAAAAAAA==",
+              "Title": "Warehouse.cs",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\Warehouse.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs",
+              "RelativeToolTip": "BFPC_System\\Warehouse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:20:02.159Z"
+              "WhenOpened": "2025-04-26T01:17:08.47Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Report.cs",
+              "DocumentIndex": 7,
+              "Title": "RandomCheck.cs",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\RandomCheck.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\RandomCheck.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\RandomCheck.cs",
+              "RelativeToolTip": "BFPC_System\\RandomCheck.cs",
+              "ViewState": "AgIAAP8CAAAAAAAAAAAjwAkDAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-25T10:32:24.969Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Report.cs [Design]",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Report.cs",
               "RelativeDocumentMoniker": "BFPC_System\\Report.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Report.cs",
-              "RelativeToolTip": "BFPC_System\\Report.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAArwEgAAAAJAAAAAAAAAA==",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Report.cs [Design]",
+              "RelativeToolTip": "BFPC_System\\Report.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:42:21.658Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "DataShow.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DataShow.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\DataShow.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DataShow.cs",
-              "RelativeToolTip": "BFPC_System\\DataShow.cs",
-              "ViewState": "AgIAANsAAAAAAAAAAAAmwEUAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-05T08:50:56.948Z"
+              "WhenOpened": "2026-06-19T06:51:05.883Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
@@ -329,68 +351,36 @@
               "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DataShow.cs [Design]",
               "RelativeToolTip": "BFPC_System\\DataShow.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-05T08:50:55.189Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Program.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\Program.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Program.cs",
-              "RelativeToolTip": "BFPC_System\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAABVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T08:26:48.057Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Admin.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Admin.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\Admin.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Admin.cs",
-              "RelativeToolTip": "BFPC_System\\Admin.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAD4vxIAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:30:51.41Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "BPFC.cs [Design]",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\BPFC.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\BPFC.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\BPFC.cs [Design]",
-              "RelativeToolTip": "BFPC_System\\BPFC.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:29:35.969Z"
+              "WhenOpened": "2025-06-05T08:50:55.189Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
-              "Title": "Home.cs [Design]",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Home.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\Home.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Home.cs [Design]",
-              "RelativeToolTip": "BFPC_System\\Home.cs [Design]",
+              "Title": "SelectPlantToOpen.cs",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\SelectPlantToOpen.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\SelectPlantToOpen.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\SelectPlantToOpen.cs",
+              "RelativeToolTip": "BFPC_System\\SelectPlantToOpen.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAowEMAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-05T08:50:11.155Z"
+              "WhenOpened": "2026-02-25T10:32:41.836Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ManageShow.cs",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\ManageShow.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\ManageShow.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\ManageShow.cs",
+              "RelativeToolTip": "BFPC_System\\ManageShow.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowBAAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T00:50:01.436Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "Warehouse.cs [Design]",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\Warehouse.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs [Design]",
-              "RelativeToolTip": "BFPC_System\\Warehouse.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T01:17:07.064Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
               "Title": "SelectPlantToOpen.cs [Design]",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\SelectPlantToOpen.cs",
               "RelativeDocumentMoniker": "BFPC_System\\SelectPlantToOpen.cs",
@@ -402,39 +392,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 15,
+              "Title": "BPFC.cs [Design]",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\BPFC.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\BPFC.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\BPFC.cs [Design]",
+              "RelativeToolTip": "BFPC_System\\BPFC.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-11T07:29:35.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Home.cs [Design]",
+              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Home.cs",
+              "RelativeDocumentMoniker": "BFPC_System\\Home.cs",
+              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Home.cs [Design]",
+              "RelativeToolTip": "BFPC_System\\Home.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-05T08:50:11.155Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
               "Title": "RandomCheck.cs [Design]",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\RandomCheck.cs",
               "RelativeDocumentMoniker": "BFPC_System\\RandomCheck.cs",
               "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\RandomCheck.cs [Design]",
               "RelativeToolTip": "BFPC_System\\RandomCheck.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:29:51.357Z"
+              "WhenOpened": "2026-03-11T07:29:51.357Z",
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "Plant.cs [Design]",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Plant.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\Plant.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Plant.cs [Design]",
-              "RelativeToolTip": "BFPC_System\\Plant.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-11T08:15:07.919Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "frmQC.cs [Design]",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\frmQC.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\frmQC.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\frmQC.cs [Design]",
-              "RelativeToolTip": "BFPC_System\\frmQC.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T07:29:16.09Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 21,
               "Title": "AdminInitializer.cs",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\AdminInitializer.cs",
               "RelativeDocumentMoniker": "BFPC_System\\AdminInitializer.cs",
@@ -458,7 +449,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 20,
               "Title": "Login.cs",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Login.cs",
               "RelativeDocumentMoniker": "BFPC_System\\Login.cs",
@@ -471,30 +462,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 19,
-              "Title": "DailyReport.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DailyReport.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\DailyReport.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\DailyReport.cs",
-              "RelativeToolTip": "BFPC_System\\DailyReport.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAswEYAAABSAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T04:10:49.977Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "CreatePlant.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\CreatePlant.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\CreatePlant.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\CreatePlant.cs",
-              "RelativeToolTip": "BFPC_System\\CreatePlant.cs",
-              "ViewState": "AgIAAMYAAAAAAAAAAAAkwN0AAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T10:30:48.971Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
               "Title": "CreateUsers.cs",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\CreateUsers.cs",
               "RelativeDocumentMoniker": "BFPC_System\\CreateUsers.cs",
@@ -506,7 +473,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 23,
               "Title": "EditUser.cs",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\EditUser.cs",
               "RelativeDocumentMoniker": "BFPC_System\\EditUser.cs",
@@ -518,31 +485,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "Warehouse.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\Warehouse.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Warehouse.cs",
-              "RelativeToolTip": "BFPC_System\\Warehouse.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAQwB8AAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T01:17:08.47Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "SelectPlantToOpen.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\SelectPlantToOpen.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\SelectPlantToOpen.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\SelectPlantToOpen.cs",
-              "RelativeToolTip": "BFPC_System\\SelectPlantToOpen.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T10:32:41.836Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 22,
               "Title": "MeIc (1).ico - Icon [256x256, 32 bit, BMP]",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\MeIc (1).ico",
               "RelativeDocumentMoniker": "BFPC_System\\MeIc (1).ico",
@@ -553,19 +496,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "RandomCheck.cs",
-              "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\RandomCheck.cs",
-              "RelativeDocumentMoniker": "BFPC_System\\RandomCheck.cs",
-              "ToolTip": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\RandomCheck.cs",
-              "RelativeToolTip": "BFPC_System\\RandomCheck.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwB8AAABKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T10:32:24.969Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 29,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_23\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_23\\BFPC_System.exe.config.deploy",
@@ -576,7 +507,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 28,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_33\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_33\\BFPC_System.exe.config.deploy",
@@ -587,7 +518,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 24,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_35\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_35\\BFPC_System.exe.config.deploy",
@@ -598,7 +529,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 27,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_17\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_17\\BFPC_System.exe.config.deploy",
@@ -609,7 +540,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 26,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_18\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_18\\BFPC_System.exe.config.deploy",
@@ -620,7 +551,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 25,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_20\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_20\\BFPC_System.exe.config.deploy",
@@ -631,7 +562,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 30,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_22\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_22\\BFPC_System.exe.config.deploy",
@@ -642,7 +573,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 31,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_19\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_19\\BFPC_System.exe.config.deploy",
@@ -653,7 +584,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 32,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_36\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_36\\BFPC_System.exe.config.deploy",
@@ -664,7 +595,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 33,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_49\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Audit System\\Application Files\\BFPC_System_1_0_0_49\\BFPC_System.exe.config.deploy",
@@ -675,7 +606,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 34,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_21\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\O\\ShareData\\Application Files\\BFPC_System_1_0_0_21\\BFPC_System.exe.config.deploy",
@@ -686,7 +617,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 35,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\D\\Audit System\\Application Files\\BFPC_System_1_0_0_34\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\D\\Audit System\\Application Files\\BFPC_System_1_0_0_34\\BFPC_System.exe.config.deploy",
@@ -697,7 +628,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 36,
               "Title": "BFPC_System.exe.config.deploy",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\D\\Application Files\\BFPC_System_1_0_0_25\\BFPC_System.exe.config.deploy",
               "RelativeDocumentMoniker": "BFPC_System\\D\\Application Files\\BFPC_System_1_0_0_25\\BFPC_System.exe.config.deploy",
@@ -708,7 +639,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 39,
               "Title": "Login.cs [Design]",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Login.cs",
               "RelativeDocumentMoniker": "BFPC_System\\Login.cs",
@@ -719,7 +650,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 38,
               "Title": "Export.cs",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\Export.cs",
               "RelativeDocumentMoniker": "BFPC_System\\Export.cs",
@@ -731,7 +662,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 37,
               "Title": "EnumerableExtensions.cs",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\EnumerableExtensions.cs",
               "RelativeDocumentMoniker": "BFPC_System\\EnumerableExtensions.cs",
@@ -743,7 +674,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 40,
               "Title": "ManageShow.cs [Design]",
               "DocumentMoniker": "D:\\reps\\BPFC\\BFPC_System\\BFPC_System\\ManageShow.cs",
               "RelativeDocumentMoniker": "BFPC_System\\ManageShow.cs",

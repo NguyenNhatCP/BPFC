@@ -1,23 +1,17 @@
-﻿using DevExpress.XtraEditors;
-using System;
-using System.Configuration;
-using System.Data.SqlClient;
+﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-using System.Drawing;
-using static BPFC_System.frmBpfc;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.Linq;
-using BPFC_System;
-using static BpfcDbContext;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using DevExpress.XtraCharts.Design;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Windows.Forms;
+using DevExpress.XtraEditors;
+using static BPFC_System.frmBpfc;
+using static BpfcDbContext;
 
 namespace BPFC_System
 {
@@ -28,6 +22,7 @@ namespace BPFC_System
         private readonly string connectionString;
         private DateTime lastLogTime = DateTime.Now;
         BpfcDbContext dbContext = new BpfcDbContext();
+        private string currentPlantName;
 
         public frmPlant()
         {
@@ -45,6 +40,17 @@ namespace BPFC_System
 
             StartPeriodicTask();
             bufferedGraphicsContext = BufferedGraphicsManager.Current;
+            txtActualTempHeat_Upper.Enter += (s, e) =>
+            {
+                //MessageBox.Show("Heat");
+                txtActualTempHeat_Upper.Focus();
+            };
+
+            txtActualTemp1Outsole.Enter += (s, e) =>
+            {
+                //MessageBox.Show("Outsole");
+                txtActualTemp1Outsole.Focus();
+            };
         }
 
         private async void StartPeriodicTask()
@@ -359,9 +365,9 @@ namespace BPFC_System
 
             if (!string.IsNullOrEmpty(plantNameWithXuong))
             {
-                string plantName = plantNameWithXuong.Replace("XƯỞNG ", "");
+                currentPlantName = plantNameWithXuong.Replace("XƯỞNG ", "");
 
-                List<string> lines = dbManager.LoadProductionLines(plantName);
+                List<string> lines = dbManager.LoadProductionLines(currentPlantName);
 
                 if (lines.Count > 0)
                 {
@@ -610,7 +616,8 @@ namespace BPFC_System
             DateTime selectedDate = dtpDate.Value.Date;
             string username = lblUserPlant.Text;
             int userID = dbManager.GetUserIdByUsername(username);
-            int lineId = dbManager.GetLineID(lineName);
+            int plantId = dbManager.GetPlantID(currentPlantName);
+            int lineId = dbManager.GetLineID(lineName, plantId);
             var partIds = dbManager.GetArticlePartIDs(articleName);
             bool timeDataExists = dbManager.HasReachedDataLimitForTimeResults(lineId, selectedDate);
             bool tempDataExists = dbManager.HasReachedDataLimitForTempResults(lineId, selectedDate);
@@ -735,7 +742,7 @@ namespace BPFC_System
 
                 if (timeValues.Any(v => v.Value.Any(value => !string.IsNullOrEmpty(value))) || tempValues.Any(v => v.Value.Any(value => !string.IsNullOrEmpty(value))))
                 {
-                    dbManager.SaveAllResults(articleName, lineName, timeValues, tempValues, userID, selectedDate);
+                    dbManager.SaveAllResults(articleName, lineId, timeValues, tempValues, userID, selectedDate);
 
                     string reportDate = selectedDate.ToString("dd-MM-yyyy");
                     string department = lblHeader.Text;

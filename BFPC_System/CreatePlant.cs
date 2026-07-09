@@ -105,31 +105,89 @@ namespace BPFC_System
             }
         }
 
-        private bool isFirstCharEntered = false;
-        private bool isToolTipShown = false; 
+        //private bool isFirstCharEntered = false;
+        //private bool isToolTipShown = false; 
+
+        //private void txtPlantName_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode != Keys.Back && isFirstCharEntered)
+        //    {
+        //        // Kiểm tra độ dài của văn bản, ví dụ cho phép chỉ nhập 1 ký tự
+        //        if (txtPlantName.Text.Length >= 1)
+        //        {
+        //            e.SuppressKeyPress = true;
+
+        //            if (!isToolTipShown)
+        //            {
+        //                ToolTip toolTip = new ToolTip();
+        //                toolTip.ToolTipTitle = "Mẹo";
+        //                toolTip.ToolTipIcon = ToolTipIcon.Info;
+        //                toolTip.SetToolTip(txtPlantName, "Tên xưởng chỉ bao gồm một ký tự.");
+        //                isToolTipShown = true; 
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        isFirstCharEntered = true;
+        //    }
+        //}
+        private bool isToolTipShown = false;
 
         private void txtPlantName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode != Keys.Back && isFirstCharEntered)
+            // 1. Luôn cho phép nhấn phím Backspace, Delete để sửa lỗi
+            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
             {
-                // Kiểm tra độ dài của văn bản, ví dụ cho phép chỉ nhập 1 ký tự
-                if (txtPlantName.Text.Length >= 1)
-                {
-                    e.SuppressKeyPress = true;
+                return;
+            }
 
-                    if (!isToolTipShown)
-                    {
-                        ToolTip toolTip = new ToolTip();
-                        toolTip.ToolTipTitle = "Mẹo";
-                        toolTip.ToolTipIcon = ToolTipIcon.Info;
-                        toolTip.SetToolTip(txtPlantName, "Tên xưởng chỉ bao gồm một ký tự.");
-                        isToolTipShown = true; 
-                    }
+            // Xác định độ dài hiện tại (Nếu bôi đen chữ rồi gõ thì coi như nhập từ đầu)
+            int currentLength = txtPlantName.SelectionLength > 0 ? 0 : txtPlantName.Text.Length;
+
+            // 2. Nếu đang nhập ký tự ĐẦU TIÊN
+            if (currentLength == 0)
+            {
+                // Kiểm tra xem phím vừa bấm có phải chữ cái (A-Z) không
+                bool isLetter = (e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z);
+
+                if (!isLetter)
+                {
+                    e.SuppressKeyPress = true; // Chặn không cho nhập
+                    ShowToolTip("Ký tự đầu tiên bắt buộc phải là CHỮ (A-Z).");
                 }
             }
-            else
+            // 3. Nếu đang nhập ký tự THỨ HAI
+            else if (currentLength == 1)
             {
-                isFirstCharEntered = true;
+                // Kiểm tra xem phím vừa bấm có phải số (0-9) không (bao gồm cả số trên bàn phím và numpad)
+                bool isNumber = ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) || (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9));
+
+                if (!isNumber)
+                {
+                    e.SuppressKeyPress = true; // Chặn không cho nhập
+                    ShowToolTip("Ký tự thứ hai bắt buộc phải là SỐ (0-9).");
+                }
+            }
+            // 4. Nếu đã đủ 2 ký tự thì chặn không cho nhập thêm
+            else if (currentLength >= 2)
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        // Hàm phụ để hiển thị ToolTip (giúp code gọn gàng hơn)
+        private void ShowToolTip(string message)
+        {
+            if (!isToolTipShown)
+            {
+                ToolTip toolTip = new ToolTip();
+                toolTip.ToolTipTitle = "Cảnh báo";
+                toolTip.ToolTipIcon = ToolTipIcon.Warning;
+                toolTip.SetToolTip(txtPlantName, message);
+                // Hiển thị tooltip ngay lập tức nổi lên trên ô nhập liệu trong 2 giây
+                toolTip.Show(message, txtPlantName, 0, -30, 2000);
+                isToolTipShown = true;
             }
         }
 

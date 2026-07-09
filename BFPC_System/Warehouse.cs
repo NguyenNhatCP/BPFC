@@ -1,20 +1,15 @@
-﻿using DevExpress.XtraEditors;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using System.Configuration;
-using System.Data.SqlClient;
-using static BPFC_System.frmBpfc;
-using BPFC_System;
-using static BpfcDbContext;
-using System.Diagnostics;
 using System.Linq;
-using System.Data.Entity;
 using System.Text;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.ExtendedProperties;
+using System.Windows.Forms;
+using DevExpress.XtraEditors;
+using static BPFC_System.frmBpfc;
+using static BpfcDbContext;
 
 namespace BPFC_System
 {
@@ -296,9 +291,11 @@ namespace BPFC_System
             }
 
             string lineName = cbxLines.SelectedItem.ToString();
+            string currentPlantName = cbxPlant.Text.Replace("Xưởng", "").Trim();
             DateTime selectedDate = dtpDate.Value.Date;
             string username = lblUserWH.Text;
-            int lineId = dbManager.GetLineID(lineName);
+            int plantId = dbManager.GetPlantID(currentPlantName);
+            int lineId = dbManager.GetLineID(lineName, plantId);
             var partIds = dbManager.GetArticlePartIDs(articleName);
             var chemicalResults = GetChemicalResults();
 

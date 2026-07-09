@@ -1,0 +1,5 @@
+﻿<connectionStrings>
+	<add name="strCon"
+		 connectionString="Data Source=10.30.0.116;Initial Catalog=BPFC_Database; User Id=sa; Password=Lacty123@;"
+		 providerName="System.Data.SqlClient" />
+</connectionStrings>

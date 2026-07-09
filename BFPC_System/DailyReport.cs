@@ -475,6 +475,22 @@ namespace BPFC_System
 
                     for (int i = 1; i <= 3; i++)
                     {
+                        // Kiểm tra Heat trước
+                        if (item.ResultTime_Heat == "FAIL")
+                        {
+                            hasFail = true;
+                            break;
+                        }
+                        else if (item.ResultTime_Heat == "PASS")
+                        {
+                            hasPass = true;
+                        }
+                        else if (string.IsNullOrEmpty(item.ResultTime_Heat))
+                        {
+                            hasNull = true;
+                        }
+
+                        // Kiểm tra Temp 1 -> 3
                         string resultTimeColumnName = $"ResultTime_{i}";
                         string timeResult = item.GetType().GetProperty(resultTimeColumnName)?.GetValue(item, null)?.ToString();
 
@@ -531,7 +547,22 @@ namespace BPFC_System
                 if (item.LineName == lineName)
                 {
                     lineNameNotFound = false; // Đã tìm thấy LineName tương ứng
+                    // Kiểm tra Heat trước
+                    if (item.ResultTemp_Heat == "FAIL")
+                    {
+                        hasFail = true;
+                        break;
+                    }
+                    else if (item.ResultTemp_Heat == "PASS")
+                    {
+                        hasPass = true;
+                    }
+                    else if (string.IsNullOrEmpty(item.ResultTemp_Heat))
+                    {
+                        hasNull = true;
+                    }
 
+                    // Kiểm tra Temp 1 -> 3
                     for (int i = 1; i <= 3; i++)
                     {
                         string resultTempColumnName = $"ResultTemp_{i}";
@@ -589,7 +620,7 @@ namespace BPFC_System
                 if (item.LineName == lineName)
                 {
                     lineNameNotFound = false; // Đã tìm thấy LineName tương ứng
-
+                    
                     for (int i = 1; i <= 3; i++)
                     {
                         string resultChemicalColumnName = $"ResultChemical_{i}";

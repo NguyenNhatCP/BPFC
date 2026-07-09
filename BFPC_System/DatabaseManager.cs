@@ -284,7 +284,21 @@ namespace BPFC_System
                             DateTime reportDate = reader.GetDateTime(reader.GetOrdinal("ReportDate"));
                             string lineResult = reader["LineResult"].ToString();
 
-                            lineResults.Add(reportDate, lineResult);
+                            try
+                            {
+                                lineResults.Add(reportDate, lineResult);
+                            }
+                            catch (ArgumentException)
+                            {
+                                // In ra cửa sổ Output để bạn xem chính xác ngày nào bị trùng
+                                //System.Diagnostics.Debug.WriteLine("🚨 DỮ LIỆU BỊ TRÙNG TRONG DB:");
+                                //System.Diagnostics.Debug.WriteLine($"   Line: {lineName}");
+                                //System.Diagnostics.Debug.WriteLine($"   Ngày bị trùng: {reportDate.ToString("dd-MM-yyyy HH:mm:ss")}");
+                                //System.Diagnostics.Debug.WriteLine($"   Giá trị cũ: {lineResults[reportDate]}, Giá trị mới bị bỏ qua: {lineResult}");
+
+                                // Tùy chọn: Nếu muốn lấy kết quả mới nhất ghi đè lên kết quả cũ, bỏ comment dòng dưới:
+                                // lineResults[reportDate] = lineResult; 
+                            }
                         }
                     }
                 }
@@ -517,7 +531,35 @@ namespace BPFC_System
 
             return lineIDs;
         }
+        public List<string> GetAvailablePlantNames()
+        {
+            List<string> plantNames = new List<string>();
 
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand("SELECT PlantName FROM Plant  WHERE IsActive = 1", connection))
+                {
+                    connection.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string plantName = reader["PlantName"].ToString();
+                            plantNames.Add(plantName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu cần
+                MessageBox.Show("Lỗi khi tải danh sách xưởng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return plantNames;
+        }
         public List<string> GetPlantNames()
         {
             List<string> plantNames = new List<string>();
@@ -939,10 +981,10 @@ WHERE LineID = @LineID AND Partname = @Partname AND CAST(ReportDate AS DATE) = C
             return DBNull.Value;
         }
 
-        public void SaveAllResults(string articleName, string lineName, Dictionary<string, string[]> timeResults, Dictionary<string, string[]> tempResults, int userId, DateTime reportDate)
+        public void SaveAllResults(string articleName, int lineId, Dictionary<string, string[]> timeResults, Dictionary<string, string[]> tempResults, int userId, DateTime reportDate)
         {
             var partIds = GetArticlePartIDs(articleName);
-            int lineId = GetLineID(lineName);
+            //int lineId = GetLineID(lineName, plantID);
 
             // Lưu dữ liệu thời gian cho Outsole và Upper
             SaveTimeResults(lineId, partIds, timeResults, userId, reportDate);
@@ -1122,7 +1164,47 @@ VALUES
                 command.Parameters.Add(paramName, SqlDbType.NVarChar).Value = DBNull.Value;
             }
         }
+        public int GetPlantID(string plantName)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
+                string query = "SELECT PlantID FROM Plant WHERE PlantName = @PlantName";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@PlantName", plantName);
+
+                    object result = command.ExecuteScalar();
+
+                    return result == null ? -1 : Convert.ToInt32(result);
+                }
+            }
+        }
+        public int GetLineID(string lineName, int plantID)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+            SELECT LineID
+            FROM ProductionLines
+            WHERE LineName = @LineName
+              AND PlantID = @PlantID";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@LineName", lineName);
+                    command.Parameters.AddWithValue("@PlantID", plantID);
+
+                    object result = command.ExecuteScalar();
+
+                    return result == null ? -1 : Convert.ToInt32(result);
+                }
+            }
+        }
         public int GetLineID(string lineName)
         {
             if (string.IsNullOrEmpty(lineName))

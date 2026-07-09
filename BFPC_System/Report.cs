@@ -1,15 +1,13 @@
-﻿using BPFC_System;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Configuration;
-using System.Windows.Forms;
-using System.Linq;
-using System.Globalization;
-using DocumentFormat.OpenXml;
-using System.Reflection;
-using OfficeOpenXml;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using DocumentFormat.OpenXml;
+using OfficeOpenXml;
 
 
 namespace BPFC_System
@@ -121,7 +119,7 @@ namespace BPFC_System
             menuStrip1.Items.Add(monthlyReportItem);
             menuStrip1.Items.Add(dailyReportItem);
 
-            List<string> plantNames = dbManager.GetPlantNames();
+            List<string> plantNames = dbManager.GetAvailablePlantNames();
             plantNames.Sort();
             foreach (string plantName in plantNames)
             {
@@ -579,8 +577,30 @@ namespace BPFC_System
             // Lấy dữ liệu từ cơ sở dữ liệu từ ngày đầu tháng đến ngày cuối tháng
             foreach ((string lineName, int lineID) in lineNames)
             {
-                // Lấy giá trị LineResult từ cơ sở dữ liệu
-                Dictionary<DateTime, string> lineResults = dbManager.GetLineResultForDateAndLineName(lineName, startDate, endDate);
+                Dictionary<DateTime, string> lineResults = null;
+
+                try
+                {
+                    // 👇 ĐÂY LÀ CHỖ GỌI HÀM DB - NƠI ẨN CHỨA LỖI
+                    lineResults = dbManager.GetLineResultForDateAndLineName(lineName, startDate, endDate);
+
+                    // 👇 LOG 2: Nếu qua được dòng trên mà không văng lỗi, mới in dòng này
+                    System.Diagnostics.Debug.WriteLine($"[THÀNH CÔNG] Lấy dữ liệu xong cho Line: {lineName}. Số ngày có kết quả: {lineResults.Count}");
+                }
+                catch (Exception ex)
+                {
+                    // 👇 LOG 3: NẾU BỊ LỖI "SAME KEY", NÓ SẼ BẮT Ở ĐÂY VÀ IN RA NGAY LẬP TỨC
+                    //System.Diagnostics.Debug.WriteLine("*********************************************************");
+                    //System.Diagnostics.Debug.WriteLine($"🔥 LỖI TRÙNG KEY XẢY RA NGAY TẠI LINE: {lineName} (ID: {lineID})");
+                    //System.Diagnostics.Debug.WriteLine($"🔥 LỖI CHI TIẾT: {ex.Message}");
+                    //System.Diagnostics.Debug.WriteLine("👉 HÀM dbManager.GetLineResultForDateAndLineName ĐÃ BỊ LỖI BÊN TRONG!");
+                    //System.Diagnostics.Debug.WriteLine("*********************************************************");
+
+                    // Ném lỗi tiếp ra ngoài để dừng hàm
+                    throw;
+                }
+                //// Lấy giá trị LineResult từ cơ sở dữ liệu
+                //Dictionary<DateTime, string> lineResults = dbManager.GetLineResultForDateAndLineName(lineName, startDate, endDate);
 
                 // Tìm dòng trong DataTable tương ứng với LineName
                 DataRow[] rows = monthlyReportDataTable.Select($"LineName = '{lineName}'");
@@ -1353,7 +1373,7 @@ namespace BPFC_System
 
         private void LoadPlantNames()
         {
-            List<string> plantNames = dbManager.GetPlantNames();
+            List<string> plantNames = dbManager.GetAvailablePlantNames();
             for (int i = 0; i < plantNames.Count; i++)
             {
                 plantNames[i] = "Xưởng " + plantNames[i];
@@ -1372,6 +1392,22 @@ namespace BPFC_System
             {
                 if (item.LineName == lineName)
                 {
+                    // ===== Kiểm tra Heat =====
+                    if (item.ResultTime_Heat == "FAIL")
+                    {
+                        hasFail = true;
+                        break;
+                    }
+                    else if (item.ResultTime_Heat == "PASS")
+                    {
+                        hasPass = true;
+                    }
+                    else if (string.IsNullOrEmpty(item.ResultTime_Heat))
+                    {
+                        hasNull = true;
+                    }
+
+                    // ===== Kiểm tra Time 1 -> 3 =====
                     for (int i = 1; i <= 3; i++)
                     {
                         string resultTimeColumnName = $"ResultTime_{i}";
@@ -1423,6 +1459,22 @@ namespace BPFC_System
             {
                 if (item.LineName == lineName)
                 {
+                    // ===== Kiểm tra Heat =====
+                    if (item.ResultTemp_Heat == "FAIL")
+                    {
+                        hasFail = true;
+                        break;
+                    }
+                    else if (item.ResultTemp_Heat == "PASS")
+                    {
+                        hasPass = true;
+                    }
+                    else if (string.IsNullOrEmpty(item.ResultTemp_Heat))
+                    {
+                        hasNull = true;
+                    }
+
+                    // ===== Kiểm tra Time 1 -> 3 =====
                     for (int i = 1; i <= 3; i++)
                     {
                         string resultTempColumnName = $"ResultTemp_{i}";
